@@ -214,7 +214,7 @@
             z-index: 10;
             text-align: left;
             max-width: 800px;
-            padding: 0 20px;
+            padding: 30px 0px 0px 0px;
             width: 100%;
         }
 
@@ -241,9 +241,8 @@
         }
 
         .hero p {
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.3rem;
+            font-size: 1.1rem;
+            /* Removed uppercase */
             /* Reduced for better alignment with text width */
             color: rgba(255, 255, 255, 0.9);
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
@@ -1537,13 +1536,15 @@
         .carousel-item img[src*="copilot"] {
             filter: none !important;
             opacity: 1 !important;
-            height: 60px; /* Increased size as requested */
+            height: 60px;
+            /* Increased size as requested */
         }
 
         .carousel-item img[src*="ChatGPT"] {
             filter: none !important;
             opacity: 1 !important;
-            height: 45px; /* Adjusting ChatGPT size to look balanced */
+            height: 45px;
+            /* Adjusting ChatGPT size to look balanced */
         }
 
         .carousel-item img:hover {
@@ -1853,31 +1854,6 @@
             margin: 0;
         }
 
-        /* Bottom data line (decorative) */
-        .benefit-data-line {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 30px;
-            padding-top: 24px;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .benefit-data-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--accent);
-            animation: blink-glow 2s ease-in-out infinite;
-        }
-
-        .benefit-data-text {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.25);
-            font-weight: 600;
-        }
 
         /* =============================================
            SECTION 04 — PRICING (Dark Tech)
@@ -2394,7 +2370,8 @@
         </div>
 
         <audio id="bg-music" loop autoplay>
-            <source src="5%20Minutos%20M%C3%BAsica%20para%20Medita%C3%A7%C3%A3o%20-%20Medite%20em%205%20minutos%20-%20Music%20For%20Good%20(128k).mp3"
+            <source
+                src="5%20Minutos%20M%C3%BAsica%20para%20Medita%C3%A7%C3%A3o%20-%20Medite%20em%205%20minutos%20-%20Music%20For%20Good%20(128k).mp3"
                 type="audio/mpeg">
         </audio>
     </section>
@@ -2498,8 +2475,6 @@
                 <p class="m-tag"><span class="m-tag-dot"></span> Como funciona</p>
                 <h2>A tecnologia que chegou primeiro.<br><em>Enquanto o mercado esperava, a CbCloud entregou a ponte
                         definitiva para o CRM.</em></h2>
-                <p>O CB MCP (Model Context Protocol) não é apenas uma integração; é a ponte definitiva entre o seu CRM e
-                    a inteligência mais avançada do mundo.</p>
             </div>
 
             <!-- Cards -->
@@ -2521,12 +2496,13 @@
                                 <path d="M3 13v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4" />
                             </svg>
                         </div>
-                        <h3>A Ponte (MCP)</h3>
-                        <p>Esqueça integrações engessadas. O CB MCP conecta o Claude diretamente ao seu Salesforce em
-                            tempo real, lendo exatamente o que precisa para resolver cada problema.</p>
+                        <h3>O Primeiro e Melhor Conector: Esqueça integrações engessadas. </h3>
+                        <p>O CbMCP é uma solução pioneira que conecta seu chat de IA favorito (seja Claude, ChatGPT,
+                            Copilot ou outros) diretamente ao seu Salesforce em tempo real, lendo exatamente o que você
+                            precisa para resolver cada problema</p>
                         <div class="method-card-bottom">
                             <span class="method-card-bottom-dot"></span>
-                            <span class="method-card-bottom-label">Salesforce · CRM · Real-time</span>
+                            <span class="method-card-bottom-label">Pioneirismo · Salesforce · Multi-AI</span>
                         </div>
                     </div>
                 </div>
@@ -2550,12 +2526,13 @@
                                 <path d="M7 17h10" />
                             </svg>
                         </div>
-                        <h3>Raciocínio Real</h3>
-                        <p>O Claude não "adivinha". Ele lê o histórico do lead, cruza dados do pipeline e gera respostas
-                            baseadas na realidade da sua empresa — agora.</p>
+                        <h3>Raciocínio com Seus Dados</h3>
+                        <p>Sua inteligência artificial não "adivinha". Ela acessa o histórico de leads,
+                            cruza dados do seu pipeline e gera respostas baseadas na realidade estratégica
+                            da sua empresa. A inteligência é sua; o conector é nosso.</p>
                         <div class="method-card-bottom">
                             <span class="method-card-bottom-dot"></span>
-                            <span class="method-card-bottom-label">Claude · Anthropic · Context</span>
+                            <span class="method-card-bottom-label">Contexto Real · Insights · Segurança</span>
                         </div>
                     </div>
                 </div>
@@ -2573,12 +2550,13 @@
                                 <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
                             </svg>
                         </div>
-                        <h3>Execução Autônoma</h3>
-                        <p>Não é só leitura. Configure fluxos para o Claude atualizar status, criar tarefas e enriquecer
-                            registros no Salesforce — sem intervenção humana.</p>
+                        <h3>Ação Direta (Plug & Play)</h3>
+                        <p>Instalação imediata e uso sem barreiras. Atualize status, crie tarefas e enriqueça
+                            registros no Salesforce diretamente pelo chat, sem precisar logar ou navegar no sistema.
+                            Elimine a fricção e aumente a adoção do seu CRM com execução autônoma.</p>
                         <div class="method-card-bottom">
                             <span class="method-card-bottom-dot"></span>
-                            <span class="method-card-bottom-label">Automation · Flow · Agentic</span>
+                            <span class="method-card-bottom-label">Zero Logon · Automação · Agentic</span>
                         </div>
                     </div>
                 </div>
@@ -2605,7 +2583,7 @@
             <div class="benefits-inner">
                 <!-- Headline -->
                 <div class="benefits-headline reveal">
-                    <h2>Por que o CB MCP é a escolha<br>dos <em>líderes de tecnologia</em>?</h2>
+                    <h2>Por que o CbMCP é a escolha<br>dos <em>líderes de tecnologia</em>?</h2>
                 </div>
 
                 <!-- Feature Cards -->
@@ -2622,12 +2600,8 @@
                             <span class="benefit-blink-dot"></span>
                         </div>
                         <h3>Agilidade Real.</h3>
-                        <p>Esqueça projetos de implementação de 6 meses. O CbMCP é ativado instantaneamente via chave de
-                            API.</p>
-                        <div class="benefit-data-line">
-                            <span class="benefit-data-dot"></span>
-                            <span class="benefit-data-text">Claude · Anthropic · Enterprise</span>
-                        </div>
+                        <p>Esqueça projetos de implementação de 6 meses.
+                            O CbMCP é ativado instantaneamente via chave de API.</p>
                     </div>
 
                     <!-- Card 2: Zero Fricção -->
@@ -2645,10 +2619,6 @@
                         <h3>Liberdade Total.</h3>
                         <p>Seja agnóstico. Troque entre os modelos de IA mais modernos conforme a evolução do mercado e
                             a sua necessidade.</p>
-                        <div class="benefit-data-line">
-                            <span class="benefit-data-dot" style="background:var(--primary);"></span>
-                            <span class="benefit-data-text">Self-Service · Plug &amp; Play</span>
-                        </div>
                     </div>
 
                     <!-- Card 3: Segurança -->
@@ -2665,10 +2635,6 @@
                         <h3>Segurança de Ponta.</h3>
                         <p>O CbMCP herda 100% das regras de permissão nativas do Salesforce. Seus dados nunca são usados
                             para treinar modelos públicos.</p>
-                        <div class="benefit-data-line">
-                            <span class="benefit-data-dot" style="background:#a5f3fc;"></span>
-                            <span class="benefit-data-text">AWS · LGPD · E2E Encrypted</span>
-                        </div>
                     </div>
 
                 </div>
@@ -2785,10 +2751,6 @@
                         <p class="tier-label">Essential</p>
                         <div class="tier-price">R$ 75,00<span class="tier-unit"> / mês</span></div>
                         <p class="tier-range">1 a 5 usuários<br>(por usuário)</p>
-                        <ul>
-                            <li>Integração Nativa</li>
-                            <li>Contexto em Real-time</li>
-                        </ul>
                         <a href="#" class="tier-cta">Assinar <svg class="tier-cta-arrow" viewBox="0 0 14 14">
                                 <path d="M1 7h12M8 2l5 5-5 5" />
                             </svg></a>
@@ -2798,10 +2760,6 @@
                         <p class="tier-label">Growth</p>
                         <div class="tier-price">R$ 70,00<span class="tier-unit"> / mês</span></div>
                         <p class="tier-range">6 a 15 usuários<br>(por usuário)</p>
-                        <ul>
-                            <li>Tudo do Essential</li>
-                            <li>Suporte Prioritário</li>
-                        </ul>
                         <a href="#" class="tier-cta">Assinar <svg class="tier-cta-arrow" viewBox="0 0 14 14">
                                 <path d="M1 7h12M8 2l5 5-5 5" />
                             </svg></a>
@@ -2811,10 +2769,6 @@
                         <p class="tier-label">Scale</p>
                         <div class="tier-price">R$ 65,00<span class="tier-unit"> / mês</span></div>
                         <p class="tier-range">16 a 30 usuários<br>(por usuário)</p>
-                        <ul>
-                            <li>Tudo do Growth</li>
-                            <li>Automações Avançadas</li>
-                        </ul>
                         <a href="#" class="tier-cta">Assinar <svg class="tier-cta-arrow" viewBox="0 0 14 14">
                                 <path d="M1 7h12M8 2l5 5-5 5" />
                             </svg></a>
@@ -2824,10 +2778,6 @@
                         <p class="tier-label">Pro</p>
                         <div class="tier-price">R$ 60,00<span class="tier-unit"> / mês</span></div>
                         <p class="tier-range">31 a 60 usuários<br>(por usuário)</p>
-                        <ul>
-                            <li>Melhor Custo-benefício</li>
-                            <li>API Access</li>
-                        </ul>
                         <a href="#" class="tier-cta">Assinar <svg class="tier-cta-arrow" viewBox="0 0 14 14">
                                 <path d="M1 7h12M8 2l5 5-5 5" />
                             </svg></a>
@@ -2978,29 +2928,6 @@
     <footer>
         <div class="footer-inner" style="max-width: 1200px; margin: 0 auto;">
             <img src="cbcloud-logo.png" alt="CBCloud" style="width: 150px; margin-bottom: 40px;">
-
-            <!-- Checkout Instructions -->
-            <div class="checkout-info"
-                style="margin-bottom: 50px; text-align: center; color: rgba(255,255,255,0.6); font-size: 0.9rem; line-height: 1.8;">
-                <h4
-                    style="color: white; margin-bottom: 20px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; font-size: 0.75rem;">
-                    Instruções de Checkout</h4>
-                <div
-                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; text-align: left; max-width: 900px; margin: 0 auto;">
-                    <div>
-                        <p><strong>1. Pagamento:</strong> Processado via Stripe como primeira etapa obrigatória.</p>
-                    </div>
-                    <div>
-                        <p><strong>2. Coleta de Dados:</strong> Na página de agradecimento, coletamos sua Instância
-                            Salesforce, CNPJ e Endereço para Nota Fiscal.</p>
-                    </div>
-                    <div>
-                        <p><strong>3. Implementação:</strong> Acione seu gestor de TI para fornecer a instância do
-                            Salesforce e finalizar a implementação técnica.</p>
-                    </div>
-                </div>
-            </div>
-
             <p style="opacity: 0.4; font-size: 0.75rem; margin-top: 40px;">CbCloud - Todos os direitos reservados.</p>
         </div>
     </footer>
