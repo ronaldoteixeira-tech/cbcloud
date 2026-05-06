@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRANDCB | CBCloud Brandbook</title>
+    <!-- SEO & Metadata -->
+    <meta name="description" content="Manual de Identidade Visual da CBCloud - Consultoria Salesforce e Inteligência Artificial. Diretrizes de marca, cores, tipografia e elementos visuais.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Color System */
+            --primary: #3B82F6;
+            --primary-dark: #1D4ED8;
+            --accent: #60A5FA;
+            --navy: #0F172A;
+            --slate: #475569;
+            --bg-white: #FFFFFF;
+            --bg-offwhite: #F8FAFC;
+            --glass: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+            
+            /* Typography */
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* Hide default cursor for custom one */
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-white);
+            color: var(--navy);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Custom Cursor */
+        #cursor {
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease, background 0.2s ease, width 0.3s ease, height 0.3s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        #cursor-dot {
+            width: 4px;
+            height: 4px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Background Animated Lights */
+        .light-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .light-node {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            animation: moveLight 20s infinite alternate;
+        }
+
+        @keyframes moveLight {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(100px, 100px); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            padding: 10px 30px;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            display: flex;
+            gap: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--slate);
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: color 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        /* Layout Sections */
+        section {
+            padding: 100px 10%;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero {
+            text-align: center;
+            height: 100vh;
+            background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 70%);
+        }
+
+        .hero img {
+            max-width: 300px;
+            margin-bottom: 40px;
+            filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.1));
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+            color: var(--navy);
+            margin-bottom: 10px;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--slate);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        /* Content Blocks */
+        .section-header {
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: var(--navy);
+            position: relative;
+        }
+
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .glass-card {
+            background: var(--bg-white);
+            border: 1px solid #f1f5f9;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+        }
+
+        .glass-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        /* Colors */
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .color-item {
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            min-height: 250px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+
+        .color-item span {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .color-item code {
+            font-size: 0.9rem;
+            margin-top: 5px;
+            opacity: 0.8;
+        }
+
+        .copy-hint {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.1);
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .color-item:hover .copy-hint {
+            opacity: 1;
+        }
+
+        /* Logo Guidelines */
+        .logo-display {
+            background: #F8FAFC;
+            border-radius: 30px;
+            padding: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-display img {
+            max-width: 400px;
+        }
+
+        /* Typography Showroom */
+        .type-showroom {
+            background: white;
+            padding: 50px;
+            border-radius: 30px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .type-item {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 20px;
+        }
+
+        .type-item:last-child { border: none; }
+
+        .type-label {
+            font-size: 0.8rem;
+            color: var(--slate);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .h1-sample { font-size: 4rem; font-weight: 800; }
+        .h2-sample { font-size: 2.5rem; font-weight: 700; }
+        .body-sample { font-size: 1rem; font-weight: 400; color: var(--slate); }
+
+        /* UI Components */
+        .ui-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .btn-sample {
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s;
+            display: inline-block;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-secondary { background: var(--navy); color: white; }
+        .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+
+        .btn-sample:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 10%;
+            background: var(--navy);
+            color: white;
+            text-align: center;
+        }
+
+        footer p {
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            section { padding: 60px 5%; }
+            nav { width: 90%; font-size: 0.7rem; justify-content: center; flex-wrap: wrap; }
+            #cursor, #cursor-dot { display: none; } /* No custom cursor on mobile */
+            * { cursor: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Custom Cursor -->
+    <div id="cursor"></div>
+    <div id="cursor-dot"></div>
+
+    <!-- Animated Lights BG -->
+    <div class="light-bg">
+        <div class="light-node" style="width: 400px; height: 400px; top: 10%; left: -5%; background: var(--primary);"></div>
+        <div class="light-node" style="width: 300px; height: 300px; bottom: 10%; right: -5%; background: var(--accent);"></div>
+        <div class="light-node" style="width: 500px; height: 500px; top: 40%; left: 50%; background: #E0F2FE;"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#home">Início</a>
+        <a href="#about">Marca</a>
+        <a href="#logo">Logo</a>
+        <a href="#colors">Cores</a>
+        <a href="#typo">Tipografia</a>
+        <a href="#ui">UI</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <img src="cbcloud-logo.png" alt="CBCloud Logo">
+        <h1>CBCloud</h1>
+        <p>Brand Identity Guidelines</p>
+    </section>
+
+    <!-- Introduction Section -->
+    <section id="about">
+        <div class="section-header">
+            <h2>Essência da Marca</h2>
+        </div>
+        <div class="info-grid">
+            <div class="glass-card">
+                <h3>Missão</h3>
+                <p>Transformar desafios complexos de negócio em soluções exponenciais e escaláveis, unindo o poder da plataforma Salesforce à Inteligência Artificial Generativa.</p>
+            </div>
+            <div class="glass-card">
+                <h3>Visão</h3>
+                <p>Ser a consultoria líder em inovação CRM no Brasil, sendo reconhecida pela excelência técnica e pela criação de valor real através da IA.</p>
+            </div>
+            <div class="glass-card">
+                <h3>Voz e Tom</h3>
+                <p>Nossa comunicação é <strong>Especialista</strong>, <strong>Futurista</strong> e <strong>Confiável</strong>. Falamos com a autoridade de quem domina a tecnologia, mas com a clareza de quem entende o negócio.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Logo Section -->
+    <section id="logo">
+        <div class="section-header">
+            <h2>Logotipo</h2>
+        </div>
+        <div class="logo-display">
+            <img src="cbcloud-logo.png" alt="CBCloud Principal Logo">
+        </div>
+        <div class="info-grid">
+            <div class="glass-card">
+                <h3>Área de Proteção</h3>
+                <p>Para garantir a legibilidade, o logo deve ser cercado por um espaço vazio equivalente à altura do ícone 'Cloud' em todos os lados.</p>
+            </div>
+            <div class="glass-card">
+                <h3>Uso Incorreto</h3>
+                <p>Nunca distorça, altere as cores originais ou aplique sombras excessivas que comprometam o minimalismo da marca.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Colors Section -->
+    <section id="colors">
+        <div class="section-header">
+            <h2>Paleta de Cores</h2>
+        </div>
+        <div class="color-palette">
+            <div class="color-item" style="background-color: #3B82F6;" onclick="copyColor('#3B82F6')">
+                <div class="copy-hint">Click p/ copiar</div>
+                <span>Primary Blue</span>
+                <code>#3B82F6</code>
+                <code>RGB(59, 130, 246)</code>
+            </div>
+            <div class="color-item" style="background-color: #0F172A;" onclick="copyColor('#0F172A')">
+                <div class="copy-hint">Click p/ copiar</div>
+                <span>Deep Navy</span>
+                <code>#0F172A</code>
+                <code>RGB(15, 23, 42)</code>
+            </div>
+            <div class="color-item" style="background-color: #60A5FA;" onclick="copyColor('#60A5FA')">
+                <div class="copy-hint">Click p/ copiar</div>
+                <span>Soft Blue</span>
+                <code>#60A5FA</code>
+                <code>RGB(96, 165, 250)</code>
+            </div>
+            <div class="color-item" style="background-color: #F8FAFC; color: #0F172A; border: 1px solid #e2e8f0;" onclick="copyColor('#F8FAFC')">
+                <div class="copy-hint">Click p/ copiar</div>
+                <span>Cloud White</span>
+                <code>#F8FAFC</code>
+                <code>RGB(248, 250, 252)</code>
+            </div>
+        </div>
+        <div style="margin-top: 40px;">
+            <p class="body-sample">A paleta foi desenhada para transmitir tecnologia e transparência. O azul primário é a nossa energia, enquanto o navy traz a sobriedade corporativa.</p>
+        </div>
+    </section>
+
+    <!-- Typography Section -->
+    <section id="typo">
+        <div class="section-header">
+            <h2>Tipografia</h2>
+        </div>
+        <div class="type-showroom">
+            <div class="type-item">
+                <p class="type-label">Heading 1 - Plus Jakarta Sans Bold</p>
+                <h1 class="h1-sample">Inovação Real com IA.</h1>
+            </div>
+            <div class="type-item">
+                <p class="type-label">Heading 2 - Plus Jakarta Sans Semibold</p>
+                <h2 class="h2-sample">O futuro do CRM é agora.</h2>
+            </div>
+            <div class="type-item">
+                <p class="type-label">Body Text - Plus Jakarta Sans Regular</p>
+                <p class="body-sample">A tipografia Plus Jakarta Sans foi escolhida por sua modernidade e excelente legibilidade em interfaces digitais. Ela equilibra formas geométricas com toques humanistas.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- UI Components Section -->
+    <section id="ui">
+        <div class="section-header">
+            <h2>Componentes de Interface</h2>
+        </div>
+        <div class="info-grid">
+            <div class="glass-card">
+                <h3>Botões</h3>
+                <div style="padding-top: 20px;">
+                    <button class="btn-sample btn-primary">Primary Action</button>
+                    <button class="btn-sample btn-secondary">Secondary</button>
+                    <button class="btn-sample btn-outline">Outline</button>
+                </div>
+            </div>
+            <div class="glass-card">
+                <h3>Cards & Glassmorphism</h3>
+                <p>Utilizamos desfoque de fundo (blur) e bordas sutis para criar profundidade e manter a sensação de leveza e "nuvem".</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <img src="cbcloud-logo.png" alt="CBCloud" style="height: 40px; filter: brightness(0) invert(1); margin-bottom: 20px; opacity: 0.8;">
+        <p>© 2026 CBCloud. Todos os direitos reservados.</p>
+        <p style="margin-top: 10px; font-size: 0.7rem;">ESTE DOCUMENTO É CONFIDENCIAL E DE USO EXCLUSIVO DA MARCA.</p>
+    </footer>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.getElementById('cursor');
+        const dot = document.getElementById('cursor-dot');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.top = e.clientY + 'px';
+            cursor.style.left = e.clientX + 'px';
+            dot.style.top = e.clientY + 'px';
+            dot.style.left = e.clientX + 'px';
+        });
+
+        document.addEventListener('mousedown', () => {
+            cursor.style.transform = 'translate(-50%, -50%) scale(0.7)';
+            cursor.style.background = 'rgba(59, 130, 246, 0.1)';
+        });
+
+        document.addEventListener('mouseup', () => {
+            cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+            cursor.style.background = 'transparent';
+        });
+
+        // Hover Effect on interactive elements
+        const interactions = document.querySelectorAll('a, button, .color-item');
+        interactions.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.style.width = '60px';
+                cursor.style.height = '60px';
+                cursor.style.borderColor = 'var(--primary)';
+                cursor.style.borderWidth = '1px';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.style.width = '30px';
+                cursor.style.height = '30px';
+                cursor.style.borderWidth = '2px';
+            });
+        });
+
+        // Copy Color Logic
+        function copyColor(hex) {
+            navigator.clipboard.writeText(hex).then(() => {
+                alert('Cor ' + hex + ' copiada para a área de transferência!');
+            });
+        }
+
+        // Section Reveal Animation
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('section').forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(50px)';
+                section.style.transition = 'all 0.8s ease-out';
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>

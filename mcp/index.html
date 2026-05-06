@@ -1,0 +1,3525 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBCloud | Soluções Salesforce & IA</title>
+    <!-- SEO & Metadata -->
+    <meta name="description"
+        content="CBCloud - Transformando negócios com Salesforce e Inteligência Artificial Generativa. Experiência digital de alta performance.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@800;900&display=swap"
+        rel="stylesheet">
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #60A5FA;
+            --primary-dark: #3B82F6;
+            --accent: #18BDC6;
+            --accent-light: #9DB8FA;
+            --navy: #0F172A;
+            --slate: #475569;
+            --white: #FFFFFF;
+            --glass: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: url('CURSOR/arrow.cur'), auto !important;
+        }
+
+        a,
+        button,
+        header img,
+        [onclick] {
+            cursor: url('CURSOR/link.cur'), pointer !important;
+        }
+
+        html,
+        body {
+            overflow-x: hidden;
+            background-color: var(--white);
+            font-family: var(--font-main);
+            color: var(--navy);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Minimalist Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #0F172A;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #1E586B;
+        }
+
+        /* Firefox Support */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #0F172A transparent;
+        }
+
+        /* Custom Follow Circle (Slate) */
+        #cursor-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 52px;
+            height: 52px;
+            pointer-events: none;
+            z-index: 10000;
+            will-change: transform;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        #cursor-circle {
+            width: 100%;
+            height: 100%;
+            border: 1.5px solid #475569;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: rgba(71, 85, 105, 0.05);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .cursor-dot {
+            width: 3px;
+            height: 3px;
+            background-color: #475569;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        /* Canvas Cloud Trail */
+        #cloud-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: opacity 0.6s ease;
+        }
+
+        /* Video Hero Section */
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 150vh;
+            /* Increased to push the white transition further down */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            object-fit: cover;
+            will-change: transform;
+            transition: transform 0.1s linear;
+            /* Smooth responsive zoom */
+        }
+
+        .hero-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Cleaner gradient for the base mesh */
+            background: linear-gradient(to bottom,
+                    rgba(15, 23, 42, 0) 0%,
+                    rgba(255, 255, 255, 0) 65%,
+                    rgba(255, 255, 255, 0.4) 85%,
+                    rgba(255, 255, 255, 1) 100%);
+            z-index: 2;
+        }
+
+        /* Transition Blur Element */
+        .blur-divider {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 500px;
+            /* Adjusted height */
+            background: linear-gradient(to bottom, transparent, #fff 90%);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            /* Gradient Mask logic: fades the BLUR itself, not just opacity */
+            mask-image: linear-gradient(to bottom, transparent, black 40%, black 100%);
+            -webkit-mask-image: linear-gradient(to bottom, transparent, black 40%, black 100%);
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        /* Ensure the next section blends in without a sharp edge */
+        #about {
+            margin-top: -500px;
+            /* Increased overlap to match the deeper hero */
+            padding-top: 550px;
+            background: linear-gradient(to bottom, transparent, var(--white) 500px, var(--white) 100%);
+            position: relative;
+            z-index: 5;
+        }
+
+        #sphere-canvas-container {
+            position: absolute;
+            right: 0%;
+            top: 45%;
+            width: 50%;
+            height: 80vh;
+            transform: translateY(-50%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: absolute;
+            /* Changed from fixed to absolute to scroll with hero */
+            top: 35%;
+            /* Moved higher as requested */
+            left: 10%;
+            transform: translateY(-50%);
+            z-index: 10;
+            text-align: left;
+            max-width: 800px;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        .hero-logo {
+            width: 250px;
+            margin-bottom: 40px;
+            animation: fadeInDown 1.2s ease-out;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+            /* Kept shadow, removed invert for colored logo */
+        }
+
+        .hero h1 {
+            font-size: 5rem;
+            font-weight: 800;
+            letter-spacing: -3px;
+            line-height: 1.1;
+            margin-bottom: 35px;
+            /* Increased spacing */
+            color: var(--white);
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4), 0 10px 30px rgba(0, 0, 0, 0.3);
+            /* Enhanced shadow */
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .hero p {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3rem;
+            /* Reduced for better alignment with text width */
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            /* Added text-shadow */
+            opacity: 0;
+            transform: translateY(20px);
+            max-width: 700px;
+            /* Constrain width to align with headline visual weight */
+            line-height: 1.6;
+        }
+
+        /* Scroll Indicator - Mouse Style */
+        .scroll-indicator {
+            position: absolute;
+            top: 85vh;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            /* Consistent centering */
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: opacity 0.5s ease, transform 1s ease;
+            opacity: 0;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4));
+        }
+
+        .mouse {
+            width: 20px;
+            height: 34px;
+            border: 1.5px solid var(--white);
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .wheel {
+            width: 3px;
+            height: 6px;
+            background-color: var(--white);
+            border-radius: 2px;
+            position: absolute;
+            top: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: mouse-wheel 2s infinite;
+        }
+
+        @keyframes mouse-wheel {
+            0% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(15px);
+            }
+        }
+
+        /* Sound Toggle */
+        .sound-toggle {
+            position: absolute;
+            top: 85vh;
+            right: 8%;
+            transform: translateY(-50%) translateX(0);
+            /* Consistent centering */
+            z-index: 10;
+            width: 42px;
+            height: 42px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease, transform 1s ease;
+            opacity: 0;
+            /* Starts hidden for animation */
+            filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.1));
+        }
+
+        .sound-toggle:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-50%) scale(1.1);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .sound-toggle svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--white);
+            transition: transform 0.3s ease;
+        }
+
+        .sound-toggle.muted .on-path {
+            display: none;
+        }
+
+        .sound-toggle:not(.muted) .off-path {
+            display: none;
+        }
+
+
+
+        /* Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 30px 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: transparent;
+            transition: all 0.4s;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+            /* Added for contrast */
+        }
+
+        header.scrolled {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 20px 10%;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-left: 40px;
+            transition: color 0.3s;
+        }
+
+        header.scrolled .nav-links a {
+            color: var(--navy);
+        }
+
+        /* Content Sections */
+        section.content-section {
+            padding: 150px 10%;
+            background-color: var(--white);
+            position: relative;
+            z-index: 5;
+        }
+
+        /* Specific override for About to ensure the entrance gradient works */
+        section#about {
+            background-color: transparent;
+        }
+
+        .section-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 100px;
+            align-items: flex-start;
+        }
+
+        /* ================================================
+           SECTION METHOD — Modern White Minimalist
+        ================================================= */
+        #method {
+            background: #ffffff;
+            padding: 140px 8%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Subtle ambient light orbs */
+        #method::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(96, 165, 250, 0.06) 0%, transparent 65%);
+            top: -100px;
+            right: -100px;
+            pointer-events: none;
+        }
+
+        #method::after {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(24, 189, 198, 0.05) 0%, transparent 65%);
+            bottom: -80px;
+            left: -80px;
+            pointer-events: none;
+        }
+
+        .method-inner {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Section header */
+        .method-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .method-header .m-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--primary);
+            background: rgba(96, 165, 250, 0.08);
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            padding: 7px 18px;
+            border-radius: 100px;
+            margin-bottom: 24px;
+        }
+
+        .method-header .m-tag-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+            box-shadow: 0 0 8px var(--primary);
+            animation: blink-glow 1.6s ease-in-out infinite;
+        }
+
+        .method-header h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #0a0f1e;
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+            margin-bottom: 20px;
+        }
+
+        .method-header h2 em {
+            font-style: normal;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .method-header p {
+            font-size: 1.05rem;
+            color: rgba(15, 23, 42, 0.5);
+            max-width: 540px;
+            margin: 0 auto;
+            line-height: 1.75;
+        }
+
+        /* Cards grid */
+        .method-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+        }
+
+        /* Individual card */
+        .method-card-new {
+            position: relative;
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 44px 36px;
+            border: 1px solid rgba(157, 184, 250, 0.2);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04), 0 1px 4px rgba(0, 0, 0, 0.03);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+            cursor: default;
+        }
+
+        /* Gradient border on hover via pseudo */
+        .method-card-new::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 25px;
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.4), rgba(24, 189, 198, 0.3), rgba(157, 184, 250, 0.2));
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .method-card-new::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            background: #ffffff;
+            z-index: 1;
+        }
+
+        .method-card-new:hover::before {
+            opacity: 1;
+        }
+
+        /* Top glow accent bar */
+        .method-card-new .card-glow-bar {
+            position: absolute;
+            top: 0;
+            left: 20%;
+            right: 20%;
+            height: 2px;
+            border-radius: 0 0 4px 4px;
+            background: linear-gradient(90deg, transparent, var(--primary), var(--accent), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 2;
+        }
+
+        .method-card-new:hover .card-glow-bar {
+            opacity: 1;
+        }
+
+        /* Hover light orb */
+        .method-card-new .card-orb {
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(96, 165, 250, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 2;
+        }
+
+        .method-card-new:hover .card-orb {
+            opacity: 1;
+        }
+
+        .method-card-new:hover {
+            transform: translateY(-8px);
+            border-color: transparent;
+            box-shadow: 0 20px 60px rgba(96, 165, 250, 0.12), 0 8px 24px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Card content sits above pseudo-elements */
+        .method-card-new .card-content {
+            position: relative;
+            z-index: 3;
+        }
+
+        /* Step index */
+        .method-card-new .card-step {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: rgba(96, 165, 250, 0.5);
+            margin-bottom: 28px;
+        }
+
+        /* Icon container */
+        .method-icon-wrap {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.08), rgba(24, 189, 198, 0.06));
+            border: 1px solid rgba(96, 165, 250, 0.15);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 28px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .method-icon-wrap::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 17px;
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.15), rgba(24, 189, 198, 0.1));
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .method-card-new:hover .method-icon-wrap {
+            border-color: rgba(96, 165, 250, 0.35);
+            box-shadow: 0 0 20px rgba(96, 165, 250, 0.15);
+            transform: scale(1.05);
+        }
+
+        .method-card-new:hover .method-icon-wrap::after {
+            opacity: 1;
+        }
+
+        .method-icon-wrap svg {
+            position: relative;
+            z-index: 1;
+        }
+
+        .method-card-new h3 {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #0a0f1e;
+            margin-bottom: 14px;
+            letter-spacing: -0.3px;
+        }
+
+        .method-card-new p {
+            font-size: 0.92rem;
+            line-height: 1.75;
+            color: rgba(15, 23, 42, 0.55);
+            margin: 0;
+        }
+
+        /* Bottom tech line */
+        .method-card-bottom {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 32px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(157, 184, 250, 0.15);
+        }
+
+        .method-card-bottom-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 6px var(--accent);
+            animation: blink-glow 2s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        .method-card-new:nth-child(2) .method-card-bottom-dot {
+            background: var(--primary);
+            box-shadow: 0 0 6px var(--primary);
+            animation-delay: 0.6s;
+        }
+
+        .method-card-new:nth-child(3) .method-card-bottom-dot {
+            background: #a5f3fc;
+            box-shadow: 0 0 6px #a5f3fc;
+            animation-delay: 1.2s;
+        }
+
+        .method-card-bottom-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(15, 23, 42, 0.25);
+        }
+
+        /* Connector line between cards */
+        .method-connector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            grid-column: 1 / -1;
+            margin: -10px 0;
+            pointer-events: none;
+        }
+
+        @media (max-width: 991px) {
+            .method-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .method-header h2 {
+                font-size: 2.2rem;
+            }
+        }
+
+        .text-block h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+            color: var(--navy);
+        }
+
+        .text-block p {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: var(--slate);
+            margin-bottom: 20px;
+        }
+
+        .accent-line {
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            margin-bottom: 30px;
+        }
+
+        /* Reveal Logic */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Footer */
+        footer {
+            padding: 100px 10%;
+            background: var(--navy);
+            color: white;
+            text-align: center;
+        }
+
+        footer img {
+            width: 150px;
+            filter: brightness(0) invert(1);
+            margin-bottom: 30px;
+            opacity: 0.7;
+        }
+
+        /* Responsive */
+        @media (max-width: 991px) {
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+
+            .section-grid {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* New Components */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px -15px rgba(129, 39, 221, 0.1);
+        }
+
+        /* Uiverse.io Card Style adapted for CB Cloud */
+        .method-card {
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 12px 17px 51px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            user-select: none;
+            color: var(--navy);
+            height: 100%;
+        }
+
+        .method-card:hover {
+            border: 1px solid var(--primary);
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.65);
+        }
+
+        .method-card:active {
+            transform: scale(0.95) rotateZ(1.7deg);
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(129, 39, 221, 0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .glass-card:hover::before {
+            opacity: 1;
+        }
+
+        .glow-light {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: var(--primary);
+            filter: blur(100px);
+            opacity: 0.15;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* Animated Button from Uiverse.io by gharsh11032000 */
+        .animated-button {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 16px 56px;
+            border: 4px solid transparent;
+            font-size: 16px;
+            background-color: transparent;
+            border-radius: 100px;
+            font-weight: 700;
+            color: #ffffff;
+            box-shadow: 0 0 0 2px #ffffff;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 1;
+        }
+
+        .animated-button svg {
+            position: absolute;
+            width: 20px;
+            fill: #ffffff;
+            z-index: 9;
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .animated-button .arr-1 {
+            right: 16px;
+        }
+
+        .animated-button .arr-2 {
+            left: -25%;
+        }
+
+        .animated-button .circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            opacity: 0;
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .animated-button .text {
+            position: relative;
+            z-index: 1;
+            transform: translateX(-12px);
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .animated-button:hover {
+            box-shadow: 0 0 0 12px transparent;
+            color: #212121;
+            border-radius: 12px;
+        }
+
+        .animated-button:hover .arr-1 {
+            right: -25%;
+        }
+
+        .animated-button:hover .arr-2 {
+            left: 16px;
+        }
+
+        .animated-button:hover .text {
+            transform: translateX(12px);
+        }
+
+        .animated-button:hover svg {
+            fill: #212121;
+        }
+
+        .animated-button:active {
+            scale: 0.95;
+            box-shadow: 0 0 0 4px #ffffff;
+        }
+
+        .animated-button:hover .circle {
+            width: 600px;
+            height: 600px;
+            opacity: 1;
+        }
+
+        /* Specific styles for buttons on white background */
+        .btn-navy {
+            color: var(--navy);
+            box-shadow: 0 0 0 2px var(--navy);
+        }
+
+        .btn-navy svg {
+            fill: var(--navy);
+        }
+
+        .btn-navy .circle {
+            background-color: var(--navy);
+        }
+
+        .btn-navy:hover {
+            color: #fff;
+        }
+
+        .btn-navy:hover svg {
+            fill: #fff;
+        }
+
+        /* Specific styles for primary color buttons */
+        .btn-brand {
+            color: var(--primary);
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+
+        .btn-brand svg {
+            fill: var(--primary);
+        }
+
+        .btn-brand .circle {
+            background-color: var(--primary);
+        }
+
+        .btn-brand:hover {
+            color: #fff;
+        }
+
+        .btn-brand:hover svg {
+            fill: #fff;
+        }
+
+        .btn-enterprise-action {
+            color: #9DB8FA;
+            box-shadow: 0 0 0 1px rgba(157, 184, 250, 0.4);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .btn-enterprise-action svg {
+            fill: #9DB8FA;
+        }
+
+        .btn-enterprise-action .circle {
+            background-color: #9DB8FA;
+        }
+
+        .btn-enterprise-action:hover {
+            color: #ffffff !important;
+            box-shadow: 0 0 0 12px transparent;
+            border-radius: 12px;
+        }
+
+        .btn-enterprise-action:hover svg {
+            fill: #ffffff !important;
+        }
+
+        /* Branding Bridge Animation */
+        .bridge-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            padding: 60px 0;
+        }
+
+        .bridge-line {
+            flex-grow: 1;
+            max-width: 200px;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--primary), var(--accent), transparent);
+            position: relative;
+        }
+
+        .bridge-line::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            border-radius: 50%;
+            transform: translateY(-50%);
+            box-shadow: 0 0 15px var(--accent);
+            animation: moveLight 3s infinite linear;
+        }
+
+        @keyframes moveLight {
+            0% {
+                left: 0;
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            80% {
+                opacity: 1;
+            }
+
+            100% {
+                left: 100%;
+                opacity: 0;
+            }
+        }
+
+        /* Pricing Table */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 50px;
+        }
+
+        .price-tier {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .price-tier h4 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--slate);
+            margin-bottom: 15px;
+        }
+
+        .price-tag {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--navy);
+        }
+
+        .price-tag span {
+            font-size: 0.9rem;
+            color: var(--slate);
+            font-weight: 500;
+        }
+
+        /* =============================================
+           GUARANTEE + FAQ — White Futuristic Minimal
+        ================================================ */
+        #guarantee {
+            background: #ffffff;
+            padding: 120px 8%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Subtle grid texture */
+        #guarantee::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(157, 184, 250, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(157, 184, 250, 0.06) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+        }
+
+        .guarantee-inner {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .guarantee-left .g-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #9DB8FA;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .guarantee-left .g-label::before {
+            content: '';
+            display: inline-block;
+            width: 24px;
+            height: 1px;
+            background: #9DB8FA;
+        }
+
+        .guarantee-left h2 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: #0a0f1e;
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin-bottom: 24px;
+        }
+
+        .guarantee-left h2 em {
+            font-style: normal;
+            background: linear-gradient(90deg, var(--primary), #9DB8FA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .guarantee-left p {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: rgba(15, 23, 42, 0.55);
+            max-width: 440px;
+        }
+
+        .guarantee-right {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .guarantee-stat {
+            font-size: 7rem;
+            font-weight: 900;
+            line-height: 1;
+            background: linear-gradient(135deg, #0a0f1e 0%, #9DB8FA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -4px;
+        }
+
+        .guarantee-stat-sub {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: rgba(15, 23, 42, 0.35);
+            font-weight: 600;
+        }
+
+        .guarantee-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            border: 1px solid rgba(157, 184, 250, 0.3);
+            border-radius: 100px;
+            margin-top: 8px;
+        }
+
+        .guarantee-badge svg {
+            flex-shrink: 0;
+        }
+
+        .guarantee-badge span {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #0a0f1e;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 768px) {
+            .guarantee-inner {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .guarantee-right {
+                align-items: flex-start;
+            }
+
+            .guarantee-stat {
+                font-size: 5rem;
+            }
+
+            .guarantee-left h2 {
+                font-size: 2rem;
+            }
+        }
+
+        /* === FAQ === */
+        #faq {
+            background: #ffffff;
+            padding: 0px 8% 120px;
+            position: relative;
+        }
+
+        .faq-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-headline {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .faq-headline .fq-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--primary);
+            font-weight: 800;
+            margin-bottom: 16px;
+            display: inline-block;
+            background: rgba(96, 165, 250, 0.1);
+            padding: 6px 16px;
+            border-radius: 100px;
+        }
+
+        .faq-headline h2 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: #0a0f1e;
+            letter-spacing: -1.5px;
+            line-height: 1.2;
+        }
+
+        /* Modern Native Details Accordion */
+        .faq-item {
+            background: #ffffff;
+            border: 1px solid rgba(157, 184, 250, 0.25);
+            border-radius: 16px;
+            margin-bottom: 16px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        }
+
+        .faq-item:hover {
+            border-color: rgba(96, 165, 250, 0.5);
+            box-shadow: 0 10px 30px rgba(157, 184, 250, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .faq-item[open] {
+            border-color: var(--primary);
+            box-shadow: 0 15px 40px rgba(96, 165, 250, 0.15);
+            background: linear-gradient(to bottom, #ffffff, #f8faff);
+        }
+
+        .faq-trigger {
+            padding: 24px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            list-style: none;
+            /* Hide default marker */
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #0a0f1e;
+            user-select: none;
+            transition: color 0.3s ease;
+        }
+
+        /* Hide marker in Chrome/Webkit */
+        .faq-trigger::-webkit-details-marker {
+            display: none;
+        }
+
+        .faq-trigger:hover {
+            color: var(--primary-dark);
+        }
+
+        .faq-q-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
+        }
+
+        .faq-q-num {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            background: rgba(96, 165, 250, 0.15);
+            padding: 8px 12px;
+            border-radius: 10px;
+            letter-spacing: 1px;
+            flex-shrink: 0;
+        }
+
+        .faq-chevron {
+            width: 24px;
+            height: 24px;
+            stroke: #9DB8FA;
+            fill: none;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .faq-item[open] .faq-chevron {
+            transform: rotate(180deg);
+            stroke: var(--primary);
+        }
+
+        .faq-content {
+            padding: 0 30px 24px 85px;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: rgba(15, 23, 42, 0.65);
+            animation: accordionSlide 0.4s ease-out forwards;
+        }
+
+        @keyframes accordionSlide {
+            0% {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .faq-trigger {
+                padding: 20px;
+            }
+
+            .faq-q-left {
+                gap: 15px;
+            }
+
+            .faq-content {
+                padding: 0 20px 24px 20px;
+            }
+
+            .faq-headline h2 {
+                font-size: 2.2rem;
+            }
+        }
+
+        /* Remove old faq-icon styles — replaced by faq-chevron */
+        .faq-icon {
+            display: none;
+        }
+
+        /* Icons */
+        .icon-box {
+            width: 60px;
+            height: 60px;
+            background: var(--white);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 20px rgba(129, 39, 221, 0.1);
+            border: 1px solid rgba(129, 39, 221, 0.1);
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        #trust-banner {
+            padding: 40px 0;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.45), rgba(24, 189, 198, 0.15), rgba(255, 255, 255, 0.45));
+            backdrop-filter: blur(20px) saturate(140%);
+            /* Reduced blur slightly to show the background */
+            -webkit-backdrop-filter: blur(20px) saturate(140%);
+            border-top: 1px solid rgba(255, 255, 255, 0.6);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+            overflow: hidden;
+            z-index: 10;
+            margin-top: -140px;
+            /* Moved even higher as requested */
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Frosted Glass Grain Texture Overlay */
+        #trust-banner::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.12;
+            /* Increased grain for a more pronounced frosted look */
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .trust-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+            flex-wrap: wrap;
+            opacity: 0.6;
+            margin-top: 30px;
+        }
+
+        .trust-logos img {
+            height: 35px;
+            filter: grayscale(1);
+            transition: all 0.3s;
+        }
+
+        .trust-logos img:hover {
+            filter: grayscale(0);
+            opacity: 1;
+        }
+
+        /* Logo Carousel Styles */
+        .trust-carousel {
+            overflow: hidden;
+            width: 100%;
+            padding: 40px 0;
+            position: relative;
+            mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+        }
+
+        .carousel-track {
+            display: flex;
+            width: max-content;
+            animation: scroll 30s linear infinite;
+            align-items: center;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .carousel-item {
+            padding: 0 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .carousel-item img {
+            height: 35px;
+            width: auto;
+            /* Navy #0F172A Filter (Default) */
+            filter: brightness(0) saturate(100%) invert(8%) sepia(21%) saturate(2853%) hue-rotate(189deg) brightness(91%) contrast(97%);
+            opacity: 0.7;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Exception for Salesforce Logo Original Color */
+        .carousel-item img[src*="SALES"] {
+            filter: none !important;
+            opacity: 1 !important;
+        }
+
+        .carousel-item img:hover {
+            opacity: 1;
+            transform: scale(1.1);
+            filter: brightness(0) saturate(100%) invert(35%) sepia(95%) saturate(601%) hue-rotate(137deg) brightness(94%) contrast(92%);
+            /* Shift to accent color */
+        }
+
+        /* Rain Effect */
+        .rain-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .drop {
+            position: absolute;
+            width: 2.5px;
+            height: 70px;
+            background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.7), rgba(24, 189, 198, 0.9), rgba(255, 255, 255, 1));
+            top: -80px;
+            animation: fall linear infinite;
+            filter: blur(0.5px);
+            border-radius: 4px;
+        }
+
+        /* Static Water Beads */
+        .bead {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            box-shadow: inset -1px -1px 3px rgba(0, 0, 0, 0.4), 1px 1px 4px rgba(255, 255, 255, 0.6);
+            pointer-events: none;
+            backdrop-filter: blur(1px);
+            opacity: 0.9;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.8;
+            }
+
+            80% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(280px);
+                opacity: 0;
+            }
+        }
+
+        /* ==============================================
+           UNIFIED DARK ZONE (sections 03 + 04 merged)
+        ================================================ */
+        .dark-zone {
+            background: linear-gradient(160deg, #07101f 0%, #0a1628 50%, #06111c 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Single shared video bg */
+        .dark-zone-video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: 20% center;
+            /* Desloca para mostrar mais da parte esquerda do vídeo */
+            opacity: 0.18;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Top fade into white sections above */
+        .dark-zone-fade {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(to bottom, #07101f 0%, rgba(7, 16, 31, 0) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Shared orbs */
+        .dark-zone .dz-orb-1 {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(24, 189, 198, 0.07) 0%, transparent 65%);
+            top: -150px;
+            right: -100px;
+            pointer-events: none;
+        }
+
+        .dark-zone .dz-orb-2 {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(96, 165, 250, 0.06) 0%, transparent 65%);
+            bottom: 10%;
+            left: -80px;
+            pointer-events: none;
+        }
+
+        .dark-zone .dz-orb-3 {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(24, 189, 198, 0.05) 0%, transparent 65%);
+            bottom: -60px;
+            right: 10%;
+            pointer-events: none;
+        }
+
+        /* Scanlines shared */
+        .dark-zone .dz-scanlines {
+            position: absolute;
+            inset: 0;
+            background-image: repeating-linear-gradient(0deg,
+                    transparent, transparent 2px,
+                    rgba(255, 255, 255, 0.012) 2px,
+                    rgba(255, 255, 255, 0.012) 4px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+
+        /* =============================================
+           SECTION 03 — BENEFITS (Tech Premium Layout)
+        =============================================== */
+        #benefits {
+            background: transparent;
+            padding: 140px 8%;
+            position: relative;
+        }
+
+        .benefits-inner {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Headline */
+        .benefits-headline {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .benefits-headline h2 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.15;
+            color: #f0f6ff;
+            margin: 0;
+        }
+
+        .benefits-headline h2 em {
+            font-style: normal;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Feature cards row */
+        .benefits-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .benefit-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 24px;
+            padding: 44px 36px;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: default;
+        }
+
+        /* Card glow on hover */
+        .benefit-card:hover {
+            background: rgba(24, 189, 198, 0.05);
+            border-color: rgba(24, 189, 198, 0.3);
+            transform: translateY(-6px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3), 0 0 40px rgba(24, 189, 198, 0.06);
+        }
+
+        /* Top gradient bar */
+        .benefit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .benefit-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Inner corner glow */
+        .benefit-card::after {
+            content: '';
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(24, 189, 198, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        .benefit-card:hover::after {
+            opacity: 1;
+        }
+
+        /* Icon / emoji area with blinking dot */
+        .benefit-icon-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+
+        .benefit-emoji {
+            font-size: 1.8rem;
+            line-height: 1;
+        }
+
+        .benefit-blink-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 10px var(--accent);
+            animation: blink-glow 1.6s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        .benefit-card:nth-child(2) .benefit-blink-dot {
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+            animation-delay: 0.5s;
+        }
+
+        .benefit-card:nth-child(3) .benefit-blink-dot {
+            background: #a5f3fc;
+            box-shadow: 0 0 10px #a5f3fc;
+            animation-delay: 1s;
+        }
+
+        @keyframes blink-glow {
+
+            0%,
+            100% {
+                opacity: 1;
+                box-shadow: 0 0 8px currentColor;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.35;
+                box-shadow: 0 0 3px currentColor;
+                transform: scale(0.8);
+            }
+        }
+
+        .benefit-card h3 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #f0f6ff;
+            margin: 0 0 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .benefit-card p {
+            font-size: 0.95rem;
+            line-height: 1.75;
+            color: rgba(200, 220, 240, 0.65);
+            margin: 0;
+        }
+
+        /* Bottom data line (decorative) */
+        .benefit-data-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 30px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .benefit-data-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: blink-glow 2s ease-in-out infinite;
+        }
+
+        .benefit-data-text {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.25);
+            font-weight: 600;
+        }
+
+        /* =============================================
+           SECTION 04 — PRICING (Dark Tech)
+        =============================================== */
+        #pricing {
+            background: transparent;
+            padding: 100px 8% 140px;
+            position: relative;
+        }
+
+        .pricing-inner {
+            position: relative;
+            z-index: 3;
+        }
+
+        /* Headline overrides for dark */
+        #pricing .pricing-headline {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        #pricing .pricing-headline h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            color: #f0f6ff;
+            margin-bottom: 18px;
+        }
+
+        #pricing .pricing-headline p {
+            font-size: 1rem;
+            color: rgba(200, 220, 240, 0.55);
+            line-height: 1.7;
+        }
+
+        #pricing .pricing-headline .p-accent-line {
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            margin: 0 auto 28px;
+            border-radius: 2px;
+        }
+
+        /* Dark price cards */
+        .price-tier-dark {
+            position: relative;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 24px;
+            padding: 40px 32px;
+            text-align: center;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+        }
+
+        .price-tier-dark:hover {
+            background: rgba(24, 189, 198, 0.04);
+            border-color: rgba(24, 189, 198, 0.25);
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3), 0 0 30px rgba(24, 189, 198, 0.05);
+        }
+
+        .price-tier-dark::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(157, 184, 250, 0.4), transparent);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .price-tier-dark:hover::before {
+            opacity: 1;
+        }
+
+        /* Featured card */
+        .price-tier-dark.featured {
+            background: rgba(96, 165, 250, 0.06);
+            border-color: rgba(96, 165, 250, 0.3);
+            transform: scale(1.03);
+        }
+
+        .price-tier-dark.featured::before {
+            opacity: 1;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+
+        .price-tier-dark.featured:hover {
+            transform: scale(1.03) translateY(-5px);
+        }
+
+        .price-tier-dark .tier-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: rgba(157, 184, 250, 0.7);
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .price-tier-dark .tier-price {
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: #f0f6ff;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .price-tier-dark .tier-price .tier-unit {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .price-tier-dark .tier-range {
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.3);
+            margin-bottom: 28px;
+            letter-spacing: 0.5px;
+        }
+
+        .price-tier-dark ul {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 32px;
+        }
+
+        .price-tier-dark ul li {
+            font-size: 0.85rem;
+            color: rgba(200, 220, 240, 0.6);
+            padding: 7px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .price-tier-dark ul li::before {
+            content: '';
+            display: inline-block;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 6px var(--accent);
+            flex-shrink: 0;
+            animation: blink-glow 2s ease-in-out infinite;
+        }
+
+        .price-tier-dark .tier-cta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 13px 20px;
+            border-radius: 100px;
+            border: 1px solid rgba(157, 184, 250, 0.35);
+            background: transparent;
+            color: #9DB8FA;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .price-tier-dark .tier-cta:hover {
+            background: rgba(157, 184, 250, 0.1);
+            border-color: rgba(157, 184, 250, 0.6);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(157, 184, 250, 0.15);
+        }
+
+        .price-tier-dark.featured .tier-cta {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-color: transparent;
+            color: #fff;
+        }
+
+        .price-tier-dark.featured .tier-cta:hover {
+            box-shadow: 0 0 30px rgba(96, 165, 250, 0.35);
+            transform: scale(1.02);
+        }
+
+        .tier-cta-arrow {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+        }
+
+        /* Enterprise dark band */
+        .pricing-enterprise-dark {
+            margin-top: 32px;
+            padding: 44px 50px;
+            background: rgba(255, 255, 255, 0.025);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+            flex-wrap: wrap;
+            transition: border-color 0.4s;
+        }
+
+        .pricing-enterprise-dark:hover {
+            border-color: rgba(24, 189, 198, 0.2);
+        }
+
+        .pricing-enterprise-dark h3 {
+            color: #f0f6ff;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .pricing-enterprise-dark p {
+            color: rgba(200, 220, 240, 0.5);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 991px) {
+            #pricing {
+                padding: 100px 6%;
+            }
+
+            .pricing-enterprise-dark {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 991px) {
+            .benefits-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .benefits-headline h2 {
+                font-size: 2.2rem;
+            }
+        }
+
+        /* ===================================================
+           MOBILE-ONLY FIXES (max-width: 768px)
+        ==================================================== */
+        @media (max-width: 768px) {
+
+            /* 1. Ocultar animação CB no banner mobile */
+            #sphere-canvas-container {
+                display: none !important;
+            }
+
+            /* Header: logo + nav lado a lado, compacto */
+            header {
+                padding: 16px 5%;
+                flex-wrap: nowrap;
+                align-items: center;
+                gap: 8px;
+            }
+
+            header.scrolled {
+                padding: 12px 5%;
+            }
+
+            .nav-links {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                align-items: center;
+                gap: 0;
+            }
+
+            .nav-links a {
+                margin-left: 14px;
+                font-size: 0.65rem;
+                letter-spacing: 0.5px;
+                white-space: nowrap;
+            }
+
+            /* Benefits headline: centralizado e com quebras limpas */
+            .benefits-headline h2 {
+                font-size: 1.75rem;
+                letter-spacing: -0.8px;
+                line-height: 1.25;
+                text-align: center;
+                padding: 0 8px;
+            }
+
+            /* 2. Seção de preços: empilhar em 2 colunas e depois 1, sem corte */
+            .pricing-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 14px;
+                overflow: visible;
+            }
+
+            .price-tier-dark {
+                padding: 28px 18px;
+            }
+
+            .price-tier-dark.featured {
+                transform: none;
+                grid-column: 1 / -1;
+                /* Destaque ocupa linha inteira */
+            }
+
+            .price-tier-dark.featured:hover {
+                transform: translateY(-5px);
+            }
+
+            .price-tier-dark .tier-price {
+                font-size: 1.9rem;
+            }
+
+            /* 3. Seção de garantia: centralizar tudo e aumentar o 7 */
+            .guarantee-right {
+                align-items: center;
+                text-align: center;
+                width: 100%;
+            }
+
+            .guarantee-stat {
+                font-size: 10rem;
+                text-align: center;
+                display: block;
+                width: 100%;
+            }
+
+            .guarantee-stat-sub {
+                text-align: center;
+                width: 100%;
+            }
+
+            .guarantee-badge {
+                justify-content: center;
+            }
+
+            /* Descer scroll no mobile */
+            .scroll-indicator {
+                top: 92vh;
+            }
+
+            /* Ocultar cursor e botão de som no mobile */
+            #cursor-wrapper,
+            .sound-toggle {
+                display: none !important;
+            }
+        }
+
+        /* Para telas muito pequenas, preços em 1 coluna */
+        @media (max-width: 480px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .price-tier-dark.featured {
+                grid-column: auto;
+            }
+        }
+
+        /* AJUSTES ADICIONAIS MOBILE (BANER E BOTÕES) */
+        @media (max-width: 768px) {
+            .hero {
+                height: 120vh;
+                /* Reduzir um pouco a altura no mobile */
+            }
+
+            .hero-content {
+                left: 5%;
+                width: 90%;
+                top: 45%;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem !important;
+                /* Texto do banner menor */
+                letter-spacing: -1px;
+                margin-bottom: 20px;
+            }
+
+            .hero p {
+                font-size: 0.8rem !important;
+                letter-spacing: 0.1rem;
+                line-height: 1.5;
+                margin: 0 auto 30px;
+            }
+
+            /* Fix para o botão animado no mobile */
+            .animated-button {
+                padding: 14px 32px !important;
+                /* Menos padding lateral para não quebrar */
+                font-size: 13px !important;
+                width: auto;
+                max-width: 100%;
+                display: inline-flex;
+            }
+
+            .animated-button .text {
+                transform: translateX(0) !important;
+                /* Simplifica no mobile */
+            }
+
+            .animated-button svg {
+                display: none;
+                /* Remove as setas no mobile para ganhar espaço */
+            }
+
+            .animated-button:hover .circle {
+                width: 400px;
+                height: 400px;
+            }
+
+            /* Preços no mobile: garantir que o botão não quebre */
+            .pricing-grid {
+                grid-template-columns: 1fr !important;
+                /* 1 coluna em iPhones/Androids comuns */
+                gap: 20px;
+            }
+
+            .tier-cta {
+                padding: 12px 10px !important;
+                font-size: 0.75rem !important;
+            }
+
+            .pricing-enterprise-dark h3 {
+                font-size: 1.1rem;
+            }
+
+            /* Video Block Demo */
+            .benefits-video-block h2 {
+                font-size: 1.8rem !important;
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Canvas Cloud Trail (Banner Area) -->
+    <canvas id="cloud-canvas"></canvas>
+
+    <div id="sphere-canvas-container"></div>
+
+    <!-- Custom Follow Circle (White Content Area) -->
+    <div id="cursor-wrapper">
+        <div id="cursor-circle">
+            <div class="cursor-dot"></div>
+            <div class="cursor-dot"></div>
+        </div>
+    </div>
+
+    <!-- Header Navigation -->
+    <header id="header">
+        <img src="cbcloud-logo.png" alt="CBCloud" style="height: 35px; filter: brightness(0) invert(1);" id="nav-logo">
+        <nav class="nav-links">
+            <a href="#about">Sobre</a>
+            <a href="#services">Serviços</a>
+            <a href="#contact">Contato</a>
+        </nav>
+    </header>
+
+    <!-- Video Hero Section -->
+    <section class="hero" id="hero-section">
+        <video autoplay muted loop playsinline class="hero-video" id="hero-video">
+            <source src="NUVEEEM_1.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay" id="hero-overlay"></div>
+        <div class="blur-divider"></div>
+        <div class="hero-content" id="hero-content">
+            <h1 id="hero-title">Conecte seu chat de IA favorito ao seu Salesforce em minutos.</h1>
+            <p id="hero-subtitle">O CbMCP é a solução pioneira que chegou ao mercado antes mesmo da própria Salesforce.
+                Transforme seu CRM em um ecossistema inteligente com uma infraestrutura plug-and-play definitiva.
+                Integre ChatGPT, Claude e Copilot nativamente aos seus dados, sem a necessidade de tecnologias
+                caríssimas como o Data Cloud.</p>
+            <div style="margin-top: 50px;">
+                <a href="#pricing" class="animated-button">
+                    <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z">
+                        </path>
+                    </svg>
+                    <span class="text">QUERO TESTAR POR 7 DIAS SEM RISCO</span>
+                    <span class="circle"></span>
+                    <svg viewBox="0 0 24 24" class="arr-1" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z">
+                        </path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <div class="scroll-indicator" id="scroll-indicator">
+            <div class="mouse">
+                <div class="wheel"></div>
+            </div>
+        </div>
+
+        <div class="sound-toggle muted" id="sound-toggle">
+            <svg viewBox="0 0 24 24">
+                <path class="on-path"
+                    d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.85 14,18.71V20.77C18.03,19.86 21,16.28 21,12C21,7.72 18.03,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16.02C15.5,15.29 16.5,13.77 16.5,12M3,9V15H7L12,20V4L7,9H3Z" />
+                <path class="off-path"
+                    d="M4.27,3L3,4.27L7.73,9H3V15H7L12,20V13.27L16.25,17.53C15.58,18.04 14.84,18.46 14,18.7V20.77C15.38,20.45 16.63,19.82 17.68,18.96L19.73,21L21,19.73L12,10.73L4.27,3M12,4L9.91,6.09L12,8.18V4M19,12C19,12.82 18.83,13.61 18.54,14.33L20,15.81C20.64,14.65 21,13.37 21,12C21,7.72 18.03,4.14 14,3.23V5.29C16.89,6.15 19,8.83 19,12M16.5,12C16.5,10.23 15.5,8.71 14,7.97V10.18L16.45,12.63C16.48,12.43 16.5,12.22 16.5,12Z" />
+            </svg>
+        </div>
+
+        <audio id="bg-music" loop autoplay>
+            <source src="5 Minutos Música para Meditação - Medite em 5 minutos - Music For Good (128k).mp3"
+                type="audio/mpeg">
+        </audio>
+    </section>
+
+    <section id="trust-banner">
+        <div class="rain-container">
+            <!-- Falling Streaks -->
+            <div class="drop" style="left: 5%; animation-duration: 2.5s; animation-delay: 0.2s;"></div>
+            <div class="drop" style="left: 15%; animation-duration: 3.2s; animation-delay: 1.5s;"></div>
+            <div class="drop" style="left: 25%; animation-duration: 2.8s; animation-delay: 0.8s;"></div>
+            <div class="drop" style="left: 38%; animation-duration: 2.4s; animation-delay: 2.1s;"></div>
+            <div class="drop" style="left: 50%; animation-duration: 3.5s; animation-delay: 0.5s;"></div>
+            <div class="drop" style="left: 62%; animation-duration: 2.9s; animation-delay: 1.2s;"></div>
+            <div class="drop" style="left: 75%; animation-duration: 3.1s; animation-delay: 1.9s;"></div>
+            <div class="drop" style="left: 88%; animation-duration: 2.6s; animation-delay: 0.3s;"></div>
+            <div class="drop" style="left: 95%; animation-duration: 3.3s; animation-delay: 1.1s;"></div>
+
+            <!-- Static Beads (Organic Rain) -->
+            <div class="bead" style="width: 4px; height: 4px; top: 20%; left: 8%;"></div>
+            <div class="bead" style="width: 6px; height: 6px; top: 65%; left: 22%;"></div>
+            <div class="bead" style="width: 3px; height: 3px; top: 12%; left: 35%;"></div>
+            <div class="bead" style="width: 5px; height: 5px; top: 82%; left: 48%;"></div>
+            <div class="bead" style="width: 7px; height: 7px; top: 38%; left: 55%;"></div>
+            <div class="bead" style="width: 4px; height: 4px; top: 15%; left: 68%;"></div>
+            <div class="bead" style="width: 8px; height: 8px; top: 52%; left: 82%;"></div>
+            <div class="bead" style="width: 3px; height: 3px; top: 88%; left: 92%;"></div>
+            <div class="bead" style="width: 5px; height: 5px; top: 30%; left: 12%;"></div>
+            <div class="bead" style="width: 4px; height: 4px; top: 45%; left: 28%;"></div>
+            <div class="bead" style="width: 6px; height: 6px; top: 72%; left: 42%;"></div>
+            <div class="bead" style="width: 3px; height: 3px; top: 25%; left: 60%;"></div>
+            <div class="bead" style="width: 5px; height: 5px; top: 60%; left: 75%;"></div>
+            <div class="bead" style="width: 4px; height: 4px; top: 10%; left: 88%;"></div>
+            <div class="bead" style="width: 6px; height: 8px; top: 40%; left: 94%; border-radius: 40%;"></div>
+            <div class="bead" style="width: 4px; height: 6px; top: 78%; left: 5%; border-radius: 40%;"></div>
+            <div class="bead" style="width: 5px; height: 5px; top: 18%; left: 52%;"></div>
+            <div class="bead" style="width: 7px; height: 7px; top: 62%; left: 88%;"></div>
+        </div>
+        <p
+            style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--slate); position: relative; z-index: 2;">
+            A infraestrutura que une gigantes</p>
+        <div class="trust-carousel" style="position: relative; z-index: 2;">
+            <div class="carousel-track">
+                <!-- Set 1 -->
+                <div class="carousel-item"><img src="SALES LOGO.png" alt="Salesforce"></div>
+                <div class="carousel-item"><img src="Claude_AI_logo.svg.png" alt="Claude AI"></div>
+                <div class="carousel-item"><img src="Amazon_Web_Services_Logo.svg.png" alt="AWS"></div>
+                <!-- Set 2 -->
+                <div class="carousel-item"><img src="SALES LOGO.png" alt="Salesforce"></div>
+                <div class="carousel-item"><img src="Claude_AI_logo.svg.png" alt="Claude AI"></div>
+                <div class="carousel-item"><img src="Amazon_Web_Services_Logo.svg.png" alt="AWS"></div>
+                <!-- Set 3 -->
+                <div class="carousel-item"><img src="SALES LOGO.png" alt="Salesforce"></div>
+                <div class="carousel-item"><img src="Claude_AI_logo.svg.png" alt="Claude AI"></div>
+                <div class="carousel-item"><img src="Amazon_Web_Services_Logo.svg.png" alt="AWS"></div>
+                <!-- Set 4 -->
+                <div class="carousel-item"><img src="SALES LOGO.png" alt="Salesforce"></div>
+                <div class="carousel-item"><img src="Claude_AI_logo.svg.png" alt="Claude AI"></div>
+                <div class="carousel-item"><img src="Amazon_Web_Services_Logo.svg.png" alt="AWS"></div>
+                <!-- Set 5 (Clones for infinite loop) -->
+                <div class="carousel-item"><img src="SALES LOGO.png" alt="Salesforce"></div>
+                <div class="carousel-item"><img src="Claude_AI_logo.svg.png" alt="Claude AI"></div>
+                <div class="carousel-item"><img src="Amazon_Web_Services_Logo.svg.png" alt="AWS"></div>
+                <!-- Set 6 -->
+                <div class="carousel-item"><img src="SALES LOGO.png" alt="Salesforce"></div>
+                <div class="carousel-item"><img src="Claude_AI_logo.svg.png" alt="Claude AI"></div>
+                <div class="carousel-item"><img src="Amazon_Web_Services_Logo.svg.png" alt="AWS"></div>
+                <!-- Set 7 -->
+                <div class="carousel-item"><img src="SALES LOGO.png" alt="Salesforce"></div>
+                <div class="carousel-item"><img src="Claude_AI_logo.svg.png" alt="Claude AI"></div>
+                <div class="carousel-item"><img src="Amazon_Web_Services_Logo.svg.png" alt="AWS"></div>
+                <!-- Set 8 -->
+                <div class="carousel-item"><img src="SALES LOGO.png" alt="Salesforce"></div>
+                <div class="carousel-item"><img src="Claude_AI_logo.svg.png" alt="Claude AI"></div>
+                <div class="carousel-item"><img src="Amazon_Web_Services_Logo.svg.png" alt="AWS"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Method — Modern Minimalist -->
+    <section id="method">
+        <div class="method-inner">
+
+            <!-- Header -->
+            <div class="method-header reveal">
+                <p class="m-tag"><span class="m-tag-dot"></span> Como funciona</p>
+                <h2>A tecnologia que chegou primeiro.<br><em>Enquanto o mercado esperava, a CbCloud entregou a ponte
+                        definitiva para o CRM.</em></h2>
+                <p>O CB MCP (Model Context Protocol) não é apenas uma integração; é a ponte definitiva entre o seu CRM e
+                    a inteligência mais avançada do mundo.</p>
+            </div>
+
+            <!-- Cards -->
+            <div class="method-cards">
+
+                <!-- Card 1: A Ponte / Conector CRM ↔ IA -->
+                <div class="method-card-new reveal">
+                    <div class="card-glow-bar"></div>
+                    <div class="card-orb"></div>
+                    <div class="card-content">
+                        <p class="card-step">Passo 01</p>
+                        <div class="method-icon-wrap">
+                            <!-- Database + connection icon: represents CRM data bridge -->
+                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#60A5FA"
+                                stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                <ellipse cx="12" cy="5" rx="9" ry="3" />
+                                <path d="M3 5v4c0 1.66 4.03 3 9 3s9-1.34 9-3V5" />
+                                <path d="M3 9v4c0 1.66 4.03 3 9 3s9-1.34 9-3V9" />
+                                <path d="M3 13v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4" />
+                            </svg>
+                        </div>
+                        <h3>A Ponte (MCP)</h3>
+                        <p>Esqueça integrações engessadas. O CB MCP conecta o Claude diretamente ao seu Salesforce em
+                            tempo real, lendo exatamente o que precisa para resolver cada problema.</p>
+                        <div class="method-card-bottom">
+                            <span class="method-card-bottom-dot"></span>
+                            <span class="method-card-bottom-label">Salesforce · CRM · Real-time</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Raciocínio / Cérebro IA -->
+                <div class="method-card-new reveal">
+                    <div class="card-glow-bar"></div>
+                    <div class="card-orb"></div>
+                    <div class="card-content">
+                        <p class="card-step">Passo 02</p>
+                        <div class="method-icon-wrap">
+                            <!-- Network/brain nodes: represents AI reasoning -->
+                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#60A5FA"
+                                stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="5" r="2" />
+                                <circle cx="5" cy="19" r="2" />
+                                <circle cx="19" cy="19" r="2" />
+                                <path d="M12 7v4" />
+                                <path d="M12 11L5 17" />
+                                <path d="M12 11l7 6" />
+                                <path d="M7 17h10" />
+                            </svg>
+                        </div>
+                        <h3>Raciocínio Real</h3>
+                        <p>O Claude não "adivinha". Ele lê o histórico do lead, cruza dados do pipeline e gera respostas
+                            baseadas na realidade da sua empresa — agora.</p>
+                        <div class="method-card-bottom">
+                            <span class="method-card-bottom-dot"></span>
+                            <span class="method-card-bottom-label">Claude · Anthropic · Context</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Execução Autônoma / Fluxo de automação -->
+                <div class="method-card-new reveal">
+                    <div class="card-glow-bar"></div>
+                    <div class="card-orb"></div>
+                    <div class="card-content">
+                        <p class="card-step">Passo 03</p>
+                        <div class="method-icon-wrap">
+                            <!-- Automation flow/zap: represents autonomous execution -->
+                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#60A5FA"
+                                stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                            </svg>
+                        </div>
+                        <h3>Execução Autônoma</h3>
+                        <p>Não é só leitura. Configure fluxos para o Claude atualizar status, criar tarefas e enriquecer
+                            registros no Salesforce — sem intervenção humana.</p>
+                        <div class="method-card-bottom">
+                            <span class="method-card-bottom-dot"></span>
+                            <span class="method-card-bottom-label">Automation · Flow · Agentic</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== DARK ZONE: sections 03 + 04 unified ====== -->
+    <div class="dark-zone">
+
+        <!-- Single shared background: video + orbs + scanlines -->
+        <video class="dark-zone-video" autoplay muted loop playsinline>
+            <source src="GettyImages-1175527957_1.mp4" type="video/mp4">
+        </video>
+        <div class="dark-zone-fade"></div>
+        <div class="dz-orb-1"></div>
+        <div class="dz-orb-2"></div>
+        <div class="dz-orb-3"></div>
+        <div class="dz-scanlines"></div>
+
+        <!-- SECTION 03: Benefits -->
+        <section id="benefits">
+            <div class="benefits-inner">
+                <!-- Headline -->
+                <div class="benefits-headline reveal">
+                    <h2>Por que o CB MCP é a escolha<br>dos <em>líderes de tecnologia</em>?</h2>
+                </div>
+
+                <!-- Feature Cards -->
+                <div class="benefits-cards">
+
+                    <!-- Card 1: Melhor IA -->
+                    <div class="benefit-card reveal">
+                        <div class="benefit-icon-row">
+                            <!-- Lightning / AI icon -->
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9DB8FA"
+                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                            </svg>
+                            <span class="benefit-blink-dot"></span>
+                        </div>
+                        <h3>Agilidade Real.</h3>
+                        <p>Esqueça projetos de implementação de 6 meses. O CbMCP é ativado instantaneamente via chave de
+                            API.</p>
+                        <div class="benefit-data-line">
+                            <span class="benefit-data-dot"></span>
+                            <span class="benefit-data-text">Claude · Anthropic · Enterprise</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Zero Fricção -->
+                    <div class="benefit-card reveal">
+                        <div class="benefit-icon-row">
+                            <!-- Settings / Self-Service icon -->
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9DB8FA"
+                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="3" />
+                                <path
+                                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                            </svg>
+                            <span class="benefit-blink-dot"></span>
+                        </div>
+                        <h3>Liberdade Total.</h3>
+                        <p>Seja agnóstico. Troque entre os modelos de IA mais modernos conforme a evolução do mercado e
+                            a sua necessidade.</p>
+                        <div class="benefit-data-line">
+                            <span class="benefit-data-dot" style="background:var(--primary);"></span>
+                            <span class="benefit-data-text">Self-Service · Plug &amp; Play</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Segurança -->
+                    <div class="benefit-card reveal">
+                        <div class="benefit-icon-row">
+                            <!-- Shield / Security icon -->
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9DB8FA"
+                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                <polyline points="9 12 11 14 15 10" />
+                            </svg>
+                            <span class="benefit-blink-dot"></span>
+                        </div>
+                        <h3>Segurança de Ponta.</h3>
+                        <p>O CbMCP herda 100% das regras de permissão nativas do Salesforce. Seus dados nunca são usados
+                            para treinar modelos públicos.</p>
+                        <div class="benefit-data-line">
+                            <span class="benefit-data-dot" style="background:#a5f3fc;"></span>
+                            <span class="benefit-data-text">AWS · LGPD · E2E Encrypted</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Subhead below cards -->
+                <p class="benefits-subhead reveal" style="
+                text-align: center;
+                margin-top: 48px;
+                font-size: 0.9rem;
+                color: rgba(200, 220, 240, 0.45);
+                line-height: 1.75;
+                max-width: 600px;
+                margin-left: auto;
+                margin-right: auto;
+                letter-spacing: 0.2px;
+            ">O CbMCP herda 100% das regras de permissão nativas do Salesforce.<br>Seus dados nunca são usados para
+                    treinar modelos públicos.</p>
+
+                <!-- Video CTA Block -->
+                <div class="benefits-video-block reveal" style="margin-top: 100px; text-align: center;">
+
+                    <!-- Headline -->
+                    <p style="
+                    font-size: 0.7rem;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: 4px;
+                    color: var(--accent);
+                    margin-bottom: 20px;
+                    opacity: 0.8;
+                ">Demo</p>
+
+                    <h2 style="
+                    font-size: clamp(2.2rem, 4vw, 3.6rem);
+                    font-weight: 800;
+                    letter-spacing: -2px;
+                    line-height: 1.1;
+                    margin-bottom: 64px;
+                    background: linear-gradient(135deg, #ffffff 0%, rgba(157,184,250,0.85) 50%, var(--accent) 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                ">Assista ao CbMCP em ação.</h2>
+
+                    <!-- Video Placeholder -->
+                    <div style="
+                    position: relative;
+                    width: 100%;
+                    max-width: 1100px;
+                    margin: 0 auto;
+                    aspect-ratio: 16/9;
+                    background: rgba(255,255,255,0.03);
+                    border: 1px solid rgba(157,184,250,0.15);
+                    border-radius: 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    overflow: hidden;
+                    box-shadow: 0 40px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.04) inset;
+                ">
+                        <!-- Subtle inner glow top -->
+                        <div style="
+                        position: absolute;
+                        top: 0; left: 50%; transform: translateX(-50%);
+                        width: 60%; height: 1px;
+                        background: linear-gradient(90deg, transparent, rgba(157,184,250,0.4), transparent);
+                    "></div>
+                        <!-- Play icon -->
+                        <div style="
+                        width: 72px; height: 72px;
+                        border-radius: 50%;
+                        background: rgba(255,255,255,0.06);
+                        border: 1px solid rgba(255,255,255,0.12);
+                        display: flex; align-items: center; justify-content: center;
+                        backdrop-filter: blur(8px);
+                    ">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)">
+                                <path d="M8 5v14l11-7z" />
+                            </svg>
+                        </div>
+                        <!-- Label -->
+                        <p style="
+                        position: absolute;
+                        bottom: 24px;
+                        left: 50%; transform: translateX(-50%);
+                        font-size: 0.65rem;
+                        text-transform: uppercase;
+                        letter-spacing: 3px;
+                        color: rgba(200,220,240,0.2);
+                        white-space: nowrap;
+                    ">Vídeo em breve</p>
+                    </div>
+
+                </div>
+
+        </section>
+        <!-- end #benefits -->
+
+        <!-- inke os botoezinhos lado topo o ''sobre'' na sessão 02, o ''serviços'' na sessão de preços e ''contato'' na sessão de FAQ -->
+        <section id="pricing">
+            <div class="pricing-inner">
+                <!-- Headline -->
+                <div class="pricing-headline reveal">
+                    <div class="p-accent-line"></div>
+                    <h2>Planos flexíveis para times de alta performance.</h2>
+                    <p>Pague apenas pelas licenças ativas. Modelo regressivo: quanto mais usuários, menor o custo
+                        unitário.</p>
+                </div>
+
+                <!-- Pricing Grid -->
+                <div class="pricing-grid reveal">
+
+                    <div class="price-tier-dark">
+                        <p class="tier-label">Essential</p>
+                        <div class="tier-price">R$ 75,00<span class="tier-unit"> / mês</span></div>
+                        <p class="tier-range">1 a 5 usuários<br>(por usuário)</p>
+                        <ul>
+                            <li>Integração Nativa</li>
+                            <li>Contexto em Real-time</li>
+                        </ul>
+                        <a href="#" class="tier-cta">Assinar <svg class="tier-cta-arrow" viewBox="0 0 14 14">
+                                <path d="M1 7h12M8 2l5 5-5 5" />
+                            </svg></a>
+                    </div>
+
+                    <div class="price-tier-dark featured">
+                        <p class="tier-label">Growth</p>
+                        <div class="tier-price">R$ 70,00<span class="tier-unit"> / mês</span></div>
+                        <p class="tier-range">6 a 15 usuários<br>(por usuário)</p>
+                        <ul>
+                            <li>Tudo do Essential</li>
+                            <li>Suporte Prioritário</li>
+                        </ul>
+                        <a href="#" class="tier-cta">Assinar <svg class="tier-cta-arrow" viewBox="0 0 14 14">
+                                <path d="M1 7h12M8 2l5 5-5 5" />
+                            </svg></a>
+                    </div>
+
+                    <div class="price-tier-dark">
+                        <p class="tier-label">Scale</p>
+                        <div class="tier-price">R$ 65,00<span class="tier-unit"> / mês</span></div>
+                        <p class="tier-range">16 a 30 usuários<br>(por usuário)</p>
+                        <ul>
+                            <li>Tudo do Growth</li>
+                            <li>Automações Avançadas</li>
+                        </ul>
+                        <a href="#" class="tier-cta">Assinar <svg class="tier-cta-arrow" viewBox="0 0 14 14">
+                                <path d="M1 7h12M8 2l5 5-5 5" />
+                            </svg></a>
+                    </div>
+
+                    <div class="price-tier-dark">
+                        <p class="tier-label">Pro</p>
+                        <div class="tier-price">R$ 60,00<span class="tier-unit"> / mês</span></div>
+                        <p class="tier-range">31 a 60 usuários<br>(por usuário)</p>
+                        <ul>
+                            <li>Melhor Custo-benefício</li>
+                            <li>API Access</li>
+                        </ul>
+                        <a href="#" class="tier-cta">Assinar <svg class="tier-cta-arrow" viewBox="0 0 14 14">
+                                <path d="M1 7h12M8 2l5 5-5 5" />
+                            </svg></a>
+                    </div>
+
+                </div>
+
+                <!-- Price Note -->
+                <p class="reveal"
+                    style="text-align: center; margin-top: 30px; font-size: 0.85rem; color: rgba(255,255,255,0.4);">
+                    <strong>Nota:</strong> Se você possui acesso administrativo ao Salesforce, a conexão básica pode ser
+                    realizada em poucos minutos.
+                </p>
+
+                <!-- Enterprise Band -->
+                <div class="pricing-enterprise-dark reveal">
+                    <div>
+                        <h3>Enterprise (Acima de 60 usuários)</h3>
+                        <p>Condições e suporte customizados para grandes operações.</p>
+                    </div>
+                    <a href="#contact" class="animated-button btn-enterprise-action" style="white-space: nowrap;">
+                        <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z">
+                            </path>
+                        </svg>
+                        <span class="text">FALAR COM UM ESPECIALISTA</span>
+                        <span class="circle"></span>
+                        <svg viewBox="0 0 24 24" class="arr-1" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z">
+                            </path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+        <!-- end #pricing -->
+
+    </div>
+    <!-- end .dark-zone -->
+
+    <section id="guarantee">
+        <div class="guarantee-inner reveal">
+            <!-- Left: Text -->
+            <div class="guarantee-left">
+                <p class="g-label">Garantia</p>
+                <h2>Risco Zero:<br><em>Teste por 7 dias.</em></h2>
+                <p>Confiamos na tecnologia que construímos. Se em at&eacute; 7 dias voc&ecirc; achar que o CB MCP
+                    n&atilde;o atende &agrave;s suas expectativas, basta cancelar no painel com um clique &mdash;
+                    devolvemos 100% do seu dinheiro. Sem burocracia.</p>
+            </div>
+            <!-- Right: Big stat -->
+            <div class="guarantee-right">
+                <div class="guarantee-stat">7</div>
+                <div class="guarantee-stat-sub">dias de garantia</div>
+                <div class="guarantee-badge">
+                    <!-- Shield SVG line icon -->
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9DB8FA" stroke-width="1.8"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        <polyline points="9 12 11 14 15 10" />
+                    </svg>
+                    <span>Reembolso 100% garantido</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq">
+        <div class="faq-wrapper">
+            <div class="faq-headline reveal">
+                <p class="fq-label">Dúvidas</p>
+                <h2>Perguntas Frequentes</h2>
+            </div>
+
+            <div class="faq-container reveal">
+
+                <details class="faq-item" name="faq-accordion">
+                    <summary class="faq-trigger">
+                        <div class="faq-q-left">
+                            <span class="faq-q-num">01</span>
+                            <span class="faq-q-text">O CbMCP funciona apenas com o ChatGPT?</span>
+                        </div>
+                        <svg class="faq-chevron" viewBox="0 0 24 24">
+                            <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                    </summary>
+                    <div class="faq-content">
+                        Não. Suportamos nativamente ChatGPT, Claude, Copilot e os principais conectores de inteligência
+                        artificial do mercado.
+                    </div>
+                </details>
+
+                <details class="faq-item" name="faq-accordion">
+                    <summary class="faq-trigger">
+                        <div class="faq-q-left">
+                            <span class="faq-q-num">02</span>
+                            <span class="faq-q-text">Preciso de equipe de TI para instalar?</span>
+                        </div>
+                        <svg class="faq-chevron" viewBox="0 0 24 24">
+                            <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                    </summary>
+                    <div class="faq-content">
+                        O setup é plug-and-play. Se você possui acesso administrativo ao Salesforce, consegue realizar a
+                        conexão seguindo nossa documentação técnica.
+                    </div>
+                </details>
+
+                <details class="faq-item" name="faq-accordion">
+                    <summary class="faq-trigger">
+                        <div class="faq-q-left">
+                            <span class="faq-q-num">03</span>
+                            <span class="faq-q-text">Como é feito o pagamento?</span>
+                        </div>
+                        <svg class="faq-chevron" viewBox="0 0 24 24">
+                            <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                    </summary>
+                    <div class="faq-content">
+                        O pagamento é processado via Stripe. <br>Após a confirmação, você será direcionado para informar
+                        os dados da sua instância Salesforce e receber sua chave de acesso.
+                    </div>
+                </details>
+
+            </div>
+
+            <!-- FAQ CTA Button -->
+            <div class="faq-cta reveal" style="text-align: center; margin-top: 60px;">
+                <a href="#contact" class="animated-button btn-navy">
+                    <!-- Robot Icon -->
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px; position: static;">
+                        <rect x="3" y="11" width="18" height="10" rx="2"></rect>
+                        <circle cx="12" cy="5" r="2"></circle>
+                        <path d="M12 7v4"></path>
+                        <line x1="8" y1="16" x2="8" y2="16"></line>
+                        <line x1="16" y1="16" x2="16" y2="16"></line>
+                    </svg>
+                    <span class="text">Ainda com dúvida? Fale com a Joy agora.</span>
+                    <span class="circle"></span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-inner" style="max-width: 1200px; margin: 0 auto;">
+            <img src="cbcloud-logo.png" alt="CBCloud" style="width: 150px; margin-bottom: 40px;">
+
+            <!-- Checkout Instructions -->
+            <div class="checkout-info"
+                style="margin-bottom: 50px; text-align: center; color: rgba(255,255,255,0.6); font-size: 0.9rem; line-height: 1.8;">
+                <h4
+                    style="color: white; margin-bottom: 20px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; font-size: 0.75rem;">
+                    Instruções de Checkout</h4>
+                <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; text-align: left; max-width: 900px; margin: 0 auto;">
+                    <div>
+                        <p><strong>1. Pagamento:</strong> Processado via Stripe como primeira etapa obrigatória.</p>
+                    </div>
+                    <div>
+                        <p><strong>2. Coleta de Dados:</strong> Na página de agradecimento, coletamos sua Instância
+                            Salesforce, CNPJ e Endereço para Nota Fiscal.</p>
+                    </div>
+                    <div>
+                        <p><strong>3. Implementação:</strong> Acione seu gestor de TI para fornecer a instância do
+                            Salesforce e finalizar a implementação técnica.</p>
+                    </div>
+                </div>
+            </div>
+
+            <p style="opacity: 0.4; font-size: 0.75rem; margin-top: 40px;">CbCloud - Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Cursor Switching Logic ---
+        const canvas = document.getElementById('cloud-canvas');
+        const ctx = canvas.getContext('2d');
+        const cursorWrapper = document.getElementById('cursor-wrapper');
+        const cursorCircle = document.getElementById('cursor-circle');
+
+        let particles = [];
+        let mouseX = 0;
+        let mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        let currentCursorType = 'cloud'; // 'cloud' or 'circle'
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
+            // Determine which cursor to show based on mouse position relative to the scrolling hero
+            const heroBottom = window.innerHeight - window.scrollY;
+
+            if (mouseY < heroBottom - 20) {
+                if (currentCursorType !== 'cloud') {
+                    currentCursorType = 'cloud';
+                    canvas.style.opacity = '1';
+                    cursorWrapper.style.opacity = '0';
+                }
+                // Generate smoke particles
+                for (let i = 0; i < 2; i++) {
+                    particles.push(new CloudParticle(mouseX, mouseY));
+                }
+            } else {
+                if (currentCursorType !== 'circle') {
+                    currentCursorType = 'circle';
+                    canvas.style.opacity = '0';
+                    cursorWrapper.style.opacity = '1';
+                }
+            }
+        });
+
+        class CloudParticle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                // Mobile: partículas 2x menores para não ficarem grotescas
+                const isMobile = window.innerWidth <= 768;
+                const sizeMult = isMobile ? 0.5 : 1;
+                this.size = (Math.random() * 80 + 60) * sizeMult; // Larger smoke
+                this.maxSize = this.size * (Math.random() * 2 + 1.5);
+                this.opacity = 0.16; // Opacity reduzida para look mais sutil
+                this.fadeRate = Math.random() * 0.003 + 0.003;
+                this.vx = (Math.random() - 0.5) * 1;
+                this.vy = (Math.random() - 0.5) * 1;
+                this.growth = (Math.random() * 0.5 + 0.3) * sizeMult;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.size < this.maxSize) this.size += this.growth;
+                this.opacity -= this.fadeRate;
+            }
+
+            draw() {
+                ctx.beginPath();
+                let gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+                gradient.addColorStop(0, `rgba(255, 255, 255, ${this.opacity})`);
+                gradient.addColorStop(1, `rgba(255, 255, 255, 0)`);
+                ctx.fillStyle = gradient;
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Update particles
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].opacity <= 0) {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }
+
+            // Update Circle Cursor (always calculating for smooth transition)
+            cursorX += (mouseX - cursorX - 26) * 0.12;
+            cursorY += (mouseY - cursorY - 26) * 0.12;
+            cursorWrapper.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0)`;
+
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // --- Scroll & Hero Logic ---
+        const heroSection = document.getElementById('hero-section');
+        const heroVideo = document.getElementById('hero-video');
+        const heroContent = document.getElementById('hero-content');
+        const heroTitle = document.getElementById('hero-title');
+        const heroSubtitle = document.getElementById('hero-subtitle');
+        const header = document.getElementById('header');
+        const navLogo = document.getElementById('nav-logo');
+
+        // Navigation & Audio Logic
+        const bgMusic = document.getElementById('bg-music');
+        const soundToggle = document.getElementById('sound-toggle');
+        let isMusicPlaying = false;
+        let userWasPlaying = false;
+
+        function startMusic() {
+            bgMusic.volume = 0.9; // Reduced volume by 10% as requested
+            if (bgMusic.currentTime < 4) bgMusic.currentTime = 4; // Pula os primeiros 4 segundos iniciais
+            bgMusic.play().then(() => {
+                soundToggle.classList.remove('muted');
+                isMusicPlaying = true;
+                userWasPlaying = true;
+            }).catch(e => {
+                // Fail silently and wait for next interaction trigger if blocked
+            });
+        }
+
+        // Garante que o loop também pule os 4 segundos iniciais
+        bgMusic.addEventListener('timeupdate', function () {
+            if (this.currentTime < 4 && !this.paused) {
+                this.currentTime = 4;
+            }
+        });
+
+        // Robust Audio Triggering
+        function handleInteraction() {
+            if (!userWasPlaying) {
+                startMusic();
+            }
+            // Remove listeners once music is confirmed playing
+            if (isMusicPlaying) {
+                triggers.forEach(t => window.removeEventListener(t, handleInteraction));
+            }
+        }
+
+        const triggers = ['click', 'scroll', 'mousemove', 'touchstart', 'wheel', 'mousedown'];
+        triggers.forEach(trigger => {
+            window.addEventListener(trigger, handleInteraction, { passive: true });
+        });
+
+        // Better handling for mobile touch vs click
+        ['click', 'touchstart'].forEach(evt => {
+            soundToggle.addEventListener(evt, (e) => {
+                e.stopPropagation();
+                if (e.type === 'touchstart') e.preventDefault(); // prevent duplicate click event
+
+                if (bgMusic.paused) {
+                    // Try to play directly within user interaction context
+                    bgMusic.play().then(() => {
+                        bgMusic.volume = 0.9;
+                        if (bgMusic.currentTime < 4) bgMusic.currentTime = 4;
+                        soundToggle.classList.remove('muted');
+                        isMusicPlaying = true;
+                        userWasPlaying = true;
+                    }).catch(err => console.log('Audio error:', err));
+                } else {
+                    bgMusic.pause();
+                    soundToggle.classList.add('muted');
+                    isMusicPlaying = false;
+                    userWasPlaying = true;
+                }
+            }, { passive: false });
+        });
+
+        // Visibility API: Pause on tab change
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                if (isMusicPlaying) bgMusic.pause();
+            } else {
+                if (isMusicPlaying && userWasPlaying) bgMusic.play();
+            }
+        });
+
+        window.addEventListener('scroll', () => {
+            let scroll = window.scrollY;
+            let windowHeight = window.innerHeight;
+
+            // Dynamic Video Zoom
+            if (scroll < windowHeight * 1.5) {
+                let zoomFactor = 1 + (scroll / 2000);
+                heroVideo.style.transform = `scale(${zoomFactor})`;
+            }
+
+            // Opacity fade based on scroll - optimized for absolute positioning
+            if (scroll < windowHeight * 1.3) {
+                let startFade = windowHeight * 0.1;
+                let endFade = windowHeight * 0.7;
+                let opacity = 1;
+
+                if (scroll > startFade) {
+                    opacity = 1 - ((scroll - startFade) / (endFade - startFade));
+                }
+                heroContent.style.opacity = Math.max(opacity, 0);
+
+                // Also fade indicators out slower
+                const scrollIndicator = document.getElementById('scroll-indicator');
+                if (scrollIndicator) scrollIndicator.style.opacity = Math.max(1 - (scroll / 500), 0);
+                // Keep sound toggle at least slightly visible or fade slower
+                if (soundToggle) soundToggle.style.opacity = Math.max(1 - (scroll / 500), 0.3);
+
+                // Volume fade logic
+                if (isMusicPlaying) {
+                    let volFadeEnd = windowHeight * 1.2;
+                    let fadeAmount = Math.max(1 - (scroll / volFadeEnd), 0);
+                    bgMusic.volume = 0.9 * fadeAmount;
+                }
+
+                heroContent.style.pointerEvents = opacity <= 0 ? 'none' : 'all';
+            }
+
+            // Header state
+            if (scroll > 100) {
+                header.classList.add('scrolled');
+                navLogo.style.filter = "none";
+            } else {
+                header.classList.remove('scrolled');
+                navLogo.style.filter = "brightness(0) invert(1)";
+            }
+        });
+
+        // Reveal animations on scroll
+        const reveals = document.querySelectorAll('.reveal');
+        const revealOptions = { threshold: 0.1 };
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, revealOptions);
+
+        reveals.forEach(el => revealObserver.observe(el));
+
+        // Hover reactions
+        const links = document.querySelectorAll('a, button, header img');
+        const dots = document.querySelectorAll('.cursor-dot');
+
+        links.forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                cursorCircle.style.transform = 'scale(1.3)';
+                cursorCircle.style.background = 'rgba(71, 85, 105, 0.1)';
+                dots.forEach(dot => dot.style.transform = 'scale(1.5)');
+            });
+            link.addEventListener('mouseleave', () => {
+                cursorCircle.style.transform = 'scale(1)';
+                cursorCircle.style.background = 'rgba(71, 85, 105, 0.05)';
+                dots.forEach(dot => dot.style.transform = 'scale(1)');
+            });
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            // Animation Sequence
+            setTimeout(() => {
+                heroTitle.style.opacity = "1";
+                heroTitle.style.transform = "translateY(0)";
+                heroTitle.style.transition = "all 1s ease";
+            }, 300);
+
+            setTimeout(() => {
+                heroSubtitle.style.opacity = "1";
+                heroSubtitle.style.transform = "translateY(0)";
+                heroSubtitle.style.transition = "all 1s ease";
+            }, 600);
+
+            setTimeout(() => {
+                const scrollInd = document.getElementById('scroll-indicator');
+                const soundTog = document.getElementById('sound-toggle');
+
+                if (scrollInd) {
+                    scrollInd.style.opacity = "1";
+                    scrollInd.style.transform = "translateX(-50%) translateY(-50%)";
+                    scrollInd.style.transition = "all 1s ease";
+                }
+                if (soundTog) {
+                    soundTog.style.opacity = "1";
+                    soundTog.style.transform = "translateY(-50%)";
+                    soundTog.style.transition = "all 1s ease";
+                }
+            }, 900);
+
+            // Immediate Music Attempt
+            startMusic();
+        });
+
+        // Periodic check to force music if browser allows it later
+        const forceAudio = setInterval(() => {
+            if (bgMusic.paused && !userWasPlaying) {
+                startMusic();
+            } else if (!bgMusic.paused) {
+                clearInterval(forceAudio);
+            }
+        }, 1000);
+
+        // Native details/summary FAQ is handled by the browser
+
+        // --- Smooth Scroll for Anchors ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // --- 3D MOVING SPHERE (WHITE) ---
+        (function () {
+            const vertexShader = `
+                uniform float uTime;
+                uniform float uDistortion;
+                uniform float uSize;
+                uniform vec2 uMouse;
+                varying float vNoise;
+                
+                vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+                vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+                vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
+                vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
+                
+                float snoise(vec3 v) {
+                    const vec2 C = vec2(1.0/6.0, 1.0/3.0);
+                    const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+                    vec3 i = floor(v + dot(v, C.yyy));
+                    vec3 x0 = v - i + dot(i, C.xxx);
+                    vec3 g = step(x0.yzx, x0.xyz);
+                    vec3 l = 1.0 - g;
+                    vec3 i1 = min(g.xyz, l.zxy);
+                    vec3 i2 = max(g.xyz, l.zxy);
+                    vec3 x1 = x0 - i1 + 1.0 * C.xxx;
+                    vec3 x2 = x0 - i2 + 2.0 * C.xxx;
+                    vec3 x3 = x0 - 1.0 + 3.0 * C.xxx;
+                    i = mod289(i);
+                    vec4 p = permute(permute(permute(i.z + vec4(0.0, i1.z, i2.z, 1.0)) + i.y + vec4(0.0, i1.y, i2.y, 1.0)) + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+                    float n_ = 1.0/7.0;
+                    vec3 ns = n_ * D.wyz - D.xzx;
+                    vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+                    vec4 x_ = floor(j * ns.z);
+                    vec4 y_ = floor(j - 7.0 * x_);
+                    vec4 x = x_ * ns.x + ns.yyyy;
+                    vec4 y = y_ * ns.x + ns.yyyy;
+                    vec4 h = 1.0 - abs(x) - abs(y);
+                    vec4 b0 = vec4(x.xy, y.xy);
+                    vec4 b1 = vec4(x.zw, y.zw);
+                    vec4 s0 = floor(b0)*2.0 + 1.0;
+                    vec4 s1 = floor(b1)*2.0 + 1.0;
+                    vec4 sh = -step(h, vec4(0.0));
+                    vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
+                    vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;
+                    vec3 p0 = vec3(a0.xy,h.x);
+                    vec3 p1 = vec3(a0.zw,h.y);
+                    vec3 p2 = vec3(a1.xy,h.z);
+                    vec3 p3 = vec3(a1.zw,h.w);
+                    vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+                    p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
+                    vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+                    m = m * m;
+                    return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
+                }
+
+                void main() {
+                    vec3 pos = position;
+                    float noise = snoise(vec3(pos.x * 0.5 + uTime * 0.15, pos.y * 0.5, pos.z * 0.5));
+                    vNoise = noise;
+                    vec3 newPos = pos + (normal * noise * uDistortion);
+                    float dist = distance(uMouse * 10.0, newPos.xy);
+                    float interaction = smoothstep(6.0, 0.0, dist);
+                    newPos.z += interaction * 1.5;
+                    vec4 mvPosition = modelViewMatrix * vec4(newPos, 1.0);
+                    gl_Position = projectionMatrix * mvPosition;
+                    gl_Position.y += sin(uTime * 0.5) * 0.5; // Subtle floating motion
+                    gl_PointSize = uSize * (20.0 / -mvPosition.z);
+                }
+            `;
+
+            const fragmentShader = `
+                uniform vec3 uColor;
+                varying float vNoise;
+                void main() {
+                    vec2 center = gl_PointCoord - vec2(0.5);
+                    float dist = length(center);
+                    if (dist > 0.45) discard;
+                    float alpha = 1.0;
+                    vec3 color1 = uColor;
+                    vec3 color2 = vec3(0.8, 0.9, 1.0); 
+                    vec3 finalColor = mix(color1, color2, vNoise * 0.5 + 0.5);
+                    gl_FragColor = vec4(finalColor, alpha);
+                }
+            `;
+
+            const container = document.getElementById('sphere-canvas-container');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(45, container.offsetWidth / container.offsetHeight, 0.1, 100);
+            camera.position.set(0, 0, 20);
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(container.offsetWidth, container.offsetHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            const objectGroup = new THREE.Group();
+            scene.add(objectGroup);
+
+            // --- CB LETTERS VOLUMETRIC GEOMETRY (POPPINS) ---
+            const cloudGeometry = new THREE.BufferGeometry();
+
+            function generateCB() {
+                const cbCanvas = document.createElement('canvas');
+                cbCanvas.width = 512; cbCanvas.height = 256; // Increased canvas resolution
+                const cbCtx = cbCanvas.getContext('2d');
+
+                cbCtx.fillStyle = '#FFFFFF';
+                // Using Poppins Black (900) for absolute sans-serif boldness
+                cbCtx.font = '900 180px Poppins';
+                cbCtx.textAlign = 'center';
+                cbCtx.textBaseline = 'middle';
+                cbCtx.fillText('cb', 256, 128);
+
+                const imgData = cbCtx.getImageData(0, 0, 512, 256).data;
+                const positions = [];
+                const normals = [];
+                const samplingDensity = 2.5;
+
+                for (let y = 0; y < 256; y += samplingDensity) {
+                    for (let x = 0; x < 512; x += samplingDensity) {
+                        const alpha = imgData[(Math.floor(y) * 512 + Math.floor(x)) * 4 + 3];
+                        if (alpha > 150) {
+                            for (let zIndex = 0; zIndex < 8; zIndex++) {
+                                const px = (x - 256) * 0.075; // Adjusted scaling for requested size
+                                const py = (128 - y) * 0.075;
+                                const pz = (Math.random() - 0.5) * 3.5;
+                                positions.push(px, py, pz);
+                                normals.push(0, 0, pz > 0 ? 1 : -1);
+                            }
+                        }
+                    }
+                }
+                cloudGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+                cloudGeometry.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3));
+            }
+
+            // Ensure the font is loaded before generating geometry
+            document.fonts.load('900 100px Poppins').then(() => {
+                generateCB();
+            });
+
+            const uniforms = {
+                uTime: { value: 0 },
+                uDistortion: { value: 0.1 },
+                uSize: { value: 2.2 }, // Increased from 1.4 to make dots more visible
+                uColor: { value: new THREE.Color('#FFFFFF') },
+                uMouse: { value: new THREE.Vector2(0, 0) }
+            };
+
+            const material = new THREE.ShaderMaterial({
+                vertexShader: vertexShader,
+                fragmentShader: fragmentShader,
+                uniforms: uniforms,
+                transparent: true,
+                blending: THREE.NormalBlending
+            });
+
+            const points = new THREE.Points(cloudGeometry, material);
+            objectGroup.add(points);
+
+            let time = 0;
+            let mouseX = 0, mouseY = 0;
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+                mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+                uniforms.uMouse.value.x += (mouseX - uniforms.uMouse.value.x) * 0.05;
+                uniforms.uMouse.value.y += (mouseY - uniforms.uMouse.value.y) * 0.05;
+            });
+
+            function adjustLayout() {
+                const w = window.innerWidth;
+                const h = container.offsetHeight;
+                if (!h) return;
+                camera.aspect = container.offsetWidth / h;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.offsetWidth, h);
+
+                if (w < 1024) {
+                    objectGroup.position.set(0, 10, -10);
+                    objectGroup.scale.set(0.5, 0.5, 0.5);
+                } else {
+                    objectGroup.position.set(0, 0, 0);
+                    objectGroup.scale.set(0.9, 0.9, 0.9);
+                }
+            }
+
+            window.addEventListener('resize', adjustLayout);
+            setTimeout(adjustLayout, 100);
+
+            function animate() {
+                requestAnimationFrame(animate);
+                time += 0.005;
+                objectGroup.rotation.y = time * 0.1;
+                objectGroup.rotation.z = time * 0.05;
+                uniforms.uTime.value = time;
+                renderer.render(scene, camera);
+            }
+            animate();
+        })();
+    </script>
+    <script>
+        // === FAQ Accordion ===
+        document.addEventListener('DOMContentLoaded', function () {
+            const triggers = document.querySelectorAll('.faq-trigger');
+            triggers.forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    const item = btn.closest('.faq-item');
+                    const isOpen = item.classList.contains('active');
+                    // Close all open items
+                    document.querySelectorAll('.faq-item').forEach(function (i) {
+                        i.classList.remove('active');
+                    });
+                    // Toggle clicked item open (unless it was already open)
+                    if (!isOpen) {
+                        item.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
