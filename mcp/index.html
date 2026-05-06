@@ -2906,9 +2906,8 @@
 
             </div>
 
-            <!-- FAQ CTA Button -->
             <div class="faq-cta reveal" style="text-align: center; margin-top: 60px;">
-                <a href="#contact" class="animated-button btn-navy">
+                <a href="javascript:void(0)" class="animated-button btn-navy" id="faq-chat-trigger" onclick="embeddedservice_bootstrap.launchMessaging()">
                     <!-- Robot Icon -->
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px; position: static;">
@@ -3475,6 +3474,25 @@
             });
         });
     </script>
+    <script type='text/javascript'>
+        function initEmbeddedMessaging() {
+            try {
+                embeddedservice_bootstrap.settings.language = 'pt_BR'; // For example, enter 'en' or 'en-US'
+
+                embeddedservice_bootstrap.init(
+                    '00D61000000esTA',
+                    'CBcloud',
+                    'https://cbcloud.my.site.com/ESWCBcloud1776693134338',
+                    {
+                        scrt2URL: 'https://cbcloud.my.salesforce-scrt.com'
+                    }
+                );
+            } catch (err) {
+                console.error('Error loading Embedded Messaging: ', err);
+            }
+        };
+    </script>
+    <script type='text/javascript' src='https://cbcloud.my.site.com/ESWCBcloud1776693134338/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
 </body>
 
 </html>
