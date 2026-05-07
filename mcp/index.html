@@ -2679,14 +2679,14 @@
                     background-clip: text;
                 ">Assista ao CbMCP em ação.</h2>
 
-                    <!-- Video Placeholder -->
-                    <div style="
+                    <!-- Video Demo Block -->
+                    <div id="demo-video-container" style="
                     position: relative;
                     width: 100%;
                     max-width: 1100px;
                     margin: 0 auto;
                     aspect-ratio: 16/9;
-                    background: rgba(255,255,255,0.03);
+                    background: #000;
                     border: 1px solid rgba(157,184,250,0.15);
                     border-radius: 20px;
                     display: flex;
@@ -2694,38 +2694,44 @@
                     justify-content: center;
                     overflow: hidden;
                     box-shadow: 0 40px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.04) inset;
+                    cursor: pointer;
                 ">
+                        <!-- The Video -->
+                        <video id="demo-video" loop playsinline style="
+                            position: absolute;
+                            top: 0; left: 0;
+                            width: 100%; height: 100%;
+                            object-fit: cover;
+                            z-index: 1;
+                            opacity: 0.8;
+                        ">
+                            <source src="assets/demo-mcp-cbcloud.mp4" type="video/mp4">
+                        </video>
+
                         <!-- Subtle inner glow top -->
                         <div style="
-                        position: absolute;
-                        top: 0; left: 50%; transform: translateX(-50%);
-                        width: 60%; height: 1px;
-                        background: linear-gradient(90deg, transparent, rgba(157,184,250,0.4), transparent);
-                    "></div>
-                        <!-- Play icon -->
-                        <div style="
-                        width: 72px; height: 72px;
-                        border-radius: 50%;
-                        background: rgba(255,255,255,0.06);
-                        border: 1px solid rgba(255,255,255,0.12);
-                        display: flex; align-items: center; justify-content: center;
-                        backdrop-filter: blur(8px);
-                    ">
+                            position: absolute;
+                            top: 0; left: 50%; transform: translateX(-50%);
+                            width: 60%; height: 1px;
+                            background: linear-gradient(90deg, transparent, rgba(157,184,250,0.4), transparent);
+                            z-index: 2;
+                        "></div>
+
+                        <!-- Play Overlay -->
+                        <div id="video-play-overlay" style="
+                            width: 72px; height: 72px;
+                            border-radius: 50%;
+                            background: rgba(255,255,255,0.06);
+                            border: 1px solid rgba(255,255,255,0.12);
+                            display: flex; align-items: center; justify-content: center;
+                            backdrop-filter: blur(8px);
+                            z-index: 3;
+                            transition: all 0.4s ease;
+                        ">
                             <svg width="26" height="26" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)">
                                 <path d="M8 5v14l11-7z" />
                             </svg>
                         </div>
-                        <!-- Label -->
-                        <p style="
-                        position: absolute;
-                        bottom: 24px;
-                        left: 50%; transform: translateX(-50%);
-                        font-size: 0.65rem;
-                        text-transform: uppercase;
-                        letter-spacing: 3px;
-                        color: rgba(200,220,240,0.2);
-                        white-space: nowrap;
-                    ">Vídeo em breve</p>
                     </div>
 
                 </div>
@@ -3493,6 +3499,30 @@
         };
     </script>
     <script type='text/javascript' src='https://cbcloud.my.site.com/ESWCBcloud1776693134338/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
+    <!-- Video Control Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoContainer = document.getElementById('demo-video-container');
+            const video = document.getElementById('demo-video');
+            const playOverlay = document.getElementById('video-play-overlay');
+
+            if (videoContainer && video && playOverlay) {
+                videoContainer.addEventListener('click', function() {
+                    if (video.paused) {
+                        video.play();
+                        playOverlay.style.opacity = '0';
+                        playOverlay.style.transform = 'scale(1.2)';
+                        playOverlay.style.pointerEvents = 'none';
+                    } else {
+                        video.pause();
+                        playOverlay.style.opacity = '1';
+                        playOverlay.style.transform = 'scale(1)';
+                        playOverlay.style.pointerEvents = 'auto';
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>
