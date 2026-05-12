@@ -2808,7 +2808,7 @@
                         <h3>Enterprise (Acima de 60 usuários)</h3>
                         <p>Condições e suporte customizados para grandes operações.</p>
                     </div>
-                    <a href="javascript:void(0)" onclick="embeddedservice_bootstrap.launchMessaging()"
+                    <a href="javascript:void(0)" onclick="if(window.embeddedservice_bootstrap) { embeddedservice_bootstrap.utilAPI.launchMessaging(); }"
                         class="animated-button btn-enterprise-action" style="white-space: nowrap;">
                         <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -2919,7 +2919,7 @@
 
             <div class="faq-cta reveal" style="text-align: center; margin-top: 60px;">
                 <a href="javascript:void(0)" class="animated-button btn-navy" id="faq-chat-trigger"
-                    onclick="embeddedservice_bootstrap.launchMessaging()">
+                    onclick="if(window.embeddedservice_bootstrap) { embeddedservice_bootstrap.utilAPI.launchMessaging(); }">
                     <!-- Robot Icon -->
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px; position: static;">
