@@ -3493,9 +3493,15 @@
         });
     </script>
     <script type='text/javascript'>
+        var embeddedMessagingReady = false;
+
+        window.addEventListener('onEmbeddedMessagingReady', function () {
+            embeddedMessagingReady = true;
+        });
+
         function initEmbeddedMessaging() {
             try {
-                embeddedservice_bootstrap.settings.language = 'pt_BR'; // For example, enter 'en' or 'en-US'
+                embeddedservice_bootstrap.settings.language = 'pt_BR';
 
                 embeddedservice_bootstrap.init(
                     '00D61000000esTA',
@@ -3517,30 +3523,16 @@
                 event.stopPropagation();
             }
 
-            if (window.embeddedservice_bootstrap && window.embeddedservice_bootstrap.utilAPI) {
-                // 1. Try official MIAW API (returns a Promise)
+            if (embeddedMessagingReady && window.embeddedservice_bootstrap && window.embeddedservice_bootstrap.utilAPI) {
                 window.embeddedservice_bootstrap.utilAPI.launchMessaging()
-                    .then(() => {
+                    .then(function () {
                         console.log("Chat opened via launchMessaging.");
                     })
-                    .catch((err) => {
-                        console.warn("API failed, trying Shadow DOM fallback...", err);
-                        
-                        // 2. Fallback: Find the button inside the Salesforce Shadow DOM
-                        const messenger = document.querySelector('embedded-service-messaging') || 
-                                          document.querySelector('embedded-messaging-container');
-                                          
-                        if (messenger && messenger.shadowRoot) {
-                            const chatBtn = messenger.shadowRoot.querySelector('button') || 
-                                            messenger.shadowRoot.querySelector('.embeddedMessagingConversationButton');
-                            if (chatBtn) {
-                                chatBtn.click();
-                                console.log("Shadow DOM button clicked.");
-                            }
-                        }
+                    .catch(function (err) {
+                        console.warn("launchMessaging failed:", err);
                     });
             } else {
-                console.error("Salesforce Bootstrap not initialized.");
+                console.warn("Embedded Messaging not ready yet.");
             }
         }
     </script>
