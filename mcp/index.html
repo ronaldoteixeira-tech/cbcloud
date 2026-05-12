@@ -2808,7 +2808,7 @@
                         <h3>Enterprise (Acima de 60 usuários)</h3>
                         <p>Condições e suporte customizados para grandes operações.</p>
                     </div>
-                    <a href="javascript:void(0)" onclick="openSalesforceChat()"
+                    <a href="javascript:void(0)" onclick="openSalesforceChat(event)"
                         class="animated-button btn-enterprise-action" style="white-space: nowrap;">
                         <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -2919,7 +2919,7 @@
 
             <div class="faq-cta reveal" style="text-align: center; margin-top: 60px;">
                 <a href="javascript:void(0)" class="animated-button btn-navy" id="faq-chat-trigger"
-                    onclick="openSalesforceChat()">
+                    onclick="openSalesforceChat(event)">
                     <!-- Robot Icon -->
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px; position: static;">
@@ -3511,24 +3511,34 @@
             }
         };
 
-        function openSalesforceChat() {
+        function openSalesforceChat(event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
             if (window.embeddedservice_bootstrap && window.embeddedservice_bootstrap.utilAPI) {
-                try {
-                    // Try official MIAW API
-                    embeddedservice_bootstrap.utilAPI.launchMessaging();
-                } catch (e) {
-                    try {
-                        // Fallback 1
-                        embeddedservice_bootstrap.launchMessaging();
-                    } catch (e2) {
-                        try {
-                            // Fallback 2 (Legacy/Unified)
-                            embeddedservice_bootstrap.utilAPI.showChatWindow();
-                        } catch (e3) {
-                            console.error("Failed to trigger chat:", e, e2, e3);
+                // 1. Try official MIAW API (returns a Promise)
+                window.embeddedservice_bootstrap.utilAPI.launchMessaging()
+                    .then(() => {
+                        console.log("Chat opened via launchMessaging.");
+                    })
+                    .catch((err) => {
+                        console.warn("API failed, trying Shadow DOM fallback...", err);
+                        
+                        // 2. Fallback: Find the button inside the Salesforce Shadow DOM
+                        const messenger = document.querySelector('embedded-service-messaging') || 
+                                          document.querySelector('embedded-messaging-container');
+                                          
+                        if (messenger && messenger.shadowRoot) {
+                            const chatBtn = messenger.shadowRoot.querySelector('button') || 
+                                            messenger.shadowRoot.querySelector('.embeddedMessagingConversationButton');
+                            if (chatBtn) {
+                                chatBtn.click();
+                                console.log("Shadow DOM button clicked.");
+                            }
                         }
-                    }
-                }
+                    });
             } else {
                 console.error("Salesforce Bootstrap not initialized.");
             }
