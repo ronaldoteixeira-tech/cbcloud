@@ -3531,15 +3531,23 @@
             var utilAPI = window.embeddedservice_bootstrap.utilAPI;
 
             if (utilAPI) {
-                console.log("utilAPI methods available:", Object.getOwnPropertyNames(utilAPI));
+                // Log prototype chain for debugging
+                var proto = Object.getPrototypeOf(utilAPI);
+                console.log("utilAPI proto methods:", proto ? Object.getOwnPropertyNames(proto) : []);
+                console.log("embeddedservice_bootstrap keys:", Object.getOwnPropertyNames(window.embeddedservice_bootstrap));
+
+                // Try calling launchMessaging (may be on prototype, not own property)
                 if (typeof utilAPI.launchMessaging === 'function') {
                     utilAPI.launchMessaging();
-                } else if (typeof utilAPI.openChat === 'function') {
-                    utilAPI.openChat();
-                } else if (typeof utilAPI.startChat === 'function') {
-                    utilAPI.startChat();
+                } else if (typeof window.embeddedservice_bootstrap.launchMessaging === 'function') {
+                    window.embeddedservice_bootstrap.launchMessaging();
                 } else {
-                    console.warn("No known open method found on utilAPI. Available:", Object.getOwnPropertyNames(utilAPI));
+                    console.warn("launchMessaging not found anywhere. Trying DOM fallback.");
+                    // Force-click hidden Salesforce button via Shadow DOM
+                    var esm = document.querySelector('embedded-service-messaging') ||
+                               document.querySelector('embedded-messaging');
+                    console.log("esm element:", esm);
+                    if (esm) console.log("esm shadowRoot:", esm.shadowRoot ? esm.shadowRoot.innerHTML.substring(0, 500) : null);
                 }
             } else {
                 // utilAPI not ready — try clicking the Salesforce button directly via Shadow DOM
