@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:lp.cbcloud.com.br)",
+      "WebFetch(domain:cbcloud.my.site.com)"
+    ]
+  }
+}

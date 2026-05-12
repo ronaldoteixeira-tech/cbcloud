@@ -3493,12 +3493,6 @@
         });
     </script>
     <script type='text/javascript'>
-        var embeddedMessagingReady = false;
-
-        window.addEventListener('onEmbeddedMessagingReady', function () {
-            embeddedMessagingReady = true;
-        });
-
         function initEmbeddedMessaging() {
             try {
                 embeddedservice_bootstrap.settings.language = 'pt_BR';
@@ -3523,43 +3517,10 @@
                 event.stopPropagation();
             }
 
-            if (!window.embeddedservice_bootstrap) {
-                console.warn("Salesforce bootstrap not loaded.");
-                return;
-            }
-
-            var utilAPI = window.embeddedservice_bootstrap.utilAPI;
-
-            if (utilAPI) {
-                // Log prototype chain for debugging
-                var proto = Object.getPrototypeOf(utilAPI);
-                console.log("utilAPI proto methods:", proto ? Object.getOwnPropertyNames(proto) : []);
-                console.log("embeddedservice_bootstrap keys:", Object.getOwnPropertyNames(window.embeddedservice_bootstrap));
-
-                // Try calling launchMessaging (may be on prototype, not own property)
-                if (typeof utilAPI.launchMessaging === 'function') {
-                    utilAPI.launchMessaging();
-                } else if (typeof window.embeddedservice_bootstrap.launchMessaging === 'function') {
-                    window.embeddedservice_bootstrap.launchMessaging();
-                } else {
-                    console.warn("launchMessaging not found anywhere. Trying DOM fallback.");
-                    // Force-click hidden Salesforce button via Shadow DOM
-                    var esm = document.querySelector('embedded-service-messaging') ||
-                               document.querySelector('embedded-messaging');
-                    console.log("esm element:", esm);
-                    if (esm) console.log("esm shadowRoot:", esm.shadowRoot ? esm.shadowRoot.innerHTML.substring(0, 500) : null);
-                }
+            if (window.embeddedservice_bootstrap && window.embeddedservice_bootstrap.utilAPI) {
+                window.embeddedservice_bootstrap.utilAPI.launchChat();
             } else {
-                // utilAPI not ready — try clicking the Salesforce button directly via Shadow DOM
-                var esm = document.querySelector('embedded-service-messaging') ||
-                           document.querySelector('embedded-messaging');
-                if (esm && esm.shadowRoot) {
-                    var btn = esm.shadowRoot.querySelector('button');
-                    if (btn) { btn.click(); return; }
-                }
-                var helpBtn = document.querySelector('.helpButton button, .embeddedServiceHelpButton button');
-                if (helpBtn) { helpBtn.click(); return; }
-                console.warn("Embedded Messaging not ready yet.");
+                console.warn("Salesforce Embedded Messaging not ready.");
             }
         }
     </script>
