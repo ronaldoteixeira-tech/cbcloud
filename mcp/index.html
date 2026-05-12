@@ -3523,15 +3523,34 @@
                 event.stopPropagation();
             }
 
-            if (embeddedMessagingReady && window.embeddedservice_bootstrap && window.embeddedservice_bootstrap.utilAPI) {
-                window.embeddedservice_bootstrap.utilAPI.launchMessaging()
-                    .then(function () {
-                        console.log("Chat opened via launchMessaging.");
-                    })
-                    .catch(function (err) {
-                        console.warn("launchMessaging failed:", err);
-                    });
+            if (!window.embeddedservice_bootstrap) {
+                console.warn("Salesforce bootstrap not loaded.");
+                return;
+            }
+
+            var utilAPI = window.embeddedservice_bootstrap.utilAPI;
+
+            if (utilAPI) {
+                console.log("utilAPI methods available:", Object.getOwnPropertyNames(utilAPI));
+                if (typeof utilAPI.launchMessaging === 'function') {
+                    utilAPI.launchMessaging();
+                } else if (typeof utilAPI.openChat === 'function') {
+                    utilAPI.openChat();
+                } else if (typeof utilAPI.startChat === 'function') {
+                    utilAPI.startChat();
+                } else {
+                    console.warn("No known open method found on utilAPI. Available:", Object.getOwnPropertyNames(utilAPI));
+                }
             } else {
+                // utilAPI not ready — try clicking the Salesforce button directly via Shadow DOM
+                var esm = document.querySelector('embedded-service-messaging') ||
+                           document.querySelector('embedded-messaging');
+                if (esm && esm.shadowRoot) {
+                    var btn = esm.shadowRoot.querySelector('button');
+                    if (btn) { btn.click(); return; }
+                }
+                var helpBtn = document.querySelector('.helpButton button, .embeddedServiceHelpButton button');
+                if (helpBtn) { helpBtn.click(); return; }
                 console.warn("Embedded Messaging not ready yet.");
             }
         }
